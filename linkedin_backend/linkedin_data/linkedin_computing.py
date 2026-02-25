@@ -56,6 +56,7 @@ class GenerateData():
             "number_of_application_by_day_name_ratio":[],
             "number_of_application_by_hour_occurence":[],
             "number_of_application_by_hour_ratio":[],
+            
             "first_application_date":"",
             "last_application_date":"",
             "all_company": [],
@@ -122,7 +123,7 @@ class GenerateData():
 
     def get_content_of_a_txt_file(self):
         """A function that get the content of txt file"""
-        f = open("archive_filepath.txt", 'r',encoding="utf-8")
+        f = open(fr"C:\Users\sakin\Desktop\code\LinkedinApplicationRecap\core\archive_filepath.txt", 'r',encoding="utf-8")
         content = f.read()
         f.close()
         return content
@@ -275,6 +276,7 @@ class GenerateData():
             list_of_streak, list_of_streak_occurence = zip(*paired)
         except:
             return [] , []
+        
         list_of_streak = list(list_of_streak)
         list_of_streak_occurence = list(list_of_streak_occurence)
 
@@ -318,8 +320,11 @@ class GenerateData():
 
         paired.sort(key=lambda x: x[1], reverse=True)
 
-        list_of_streak, list_of_streak_occurence = zip(*paired)
-
+        try:
+            list_of_streak, list_of_streak_occurence = zip(*paired)
+        except:
+            return [] , []
+        
         list_of_streak = list(list_of_streak)
         list_of_streak_occurence = list(list_of_streak_occurence)
 
@@ -342,8 +347,11 @@ class GenerateData():
 
         paired.sort(key=lambda x: x[1], reverse=True)
 
-        list_of_element, occurence_of_element_list = zip(*paired)
-
+        try:
+            list_of_element, occurence_of_element_list = zip(*paired)
+        except:
+            return [] , []
+        
         list_of_element = list(list_of_element)
         occurence_of_element_list = list(occurence_of_element_list)
 
@@ -396,14 +404,21 @@ class GenerateData():
 
         for line in self.filedata:            
             self.all_date_of_application.append(line[0].split(",")[0])
-        
+
         self.lowest_date_of_application = self.get_the_lowest_date_of_a_list()
         self.last_date_of_application = self.get_the_lowest_date_of_a_list(True)
         return self.lowest_date_of_application , self.last_date_of_application
     
     def main_function(self,choosen_date1="",choosen_date2=""):
         """A function that compute the whole data"""
-        disclamer_choice = input("Ecrit 1234 pour ne pas avoir à choisir de date sinon presse entrer: ")
+        #disclamer_choice = input("Ecrit 1234 pour ne pas avoir à choisir de date sinon presse entrer: ")
+        
+        
+        disclamer_choice = "#####"
+        
+        if len(choosen_date1) == 0:
+            disclamer_choice = "1234"
+        
         if disclamer_choice == "1234":
             choosen_date1 = datetime(2000,1,1)
             choosen_date2 = datetime(3000,1,1)
@@ -423,27 +438,25 @@ class GenerateData():
         
             
         else:
-            min_date , max_date = self.min_and_max_date_of_applicaton()
-            print(f"Les dates doivent être entre {min_date} et {max_date} pour ne pas avoir de bug")
-            choice1 = input("Choisie une date de début sous le format Année-Mois-Jour exemple 11-05-2022: ").replace("/","-")
-            choice2 = input("Choisie une date de fin sous le format Année-Mois-Jour exemple 11-06-2023: ").replace("/","-")
+            choice1 = choosen_date1 
+            choice2 = choosen_date2
             try:
-                choosen_date1 = datetime(int(choice1.split("-")[2]), int(choice1.split("-")[1]), int(choice1.split("-")[0]))
-                choosen_date2 = datetime(int(choice2.split("-")[2]), int(choice2.split("-")[1]), int(choice2.split("-")[0]))
+                choosen_date1 = datetime(int(choice1.split("-")[0]), int(choice1.split("-")[1]), int(choice1.split("-")[2]))
+                choosen_date2 = datetime(int(choice2.split("-")[0]), int(choice2.split("-")[1]), int(choice2.split("-")[2]))
                 if choosen_date1 == choosen_date2:
                     print("Les dates ne peuvent pas être les mêmes")
 
                 if choosen_date1 > choosen_date2:
                     print("La date 1 doit être supérieur à la date 2")
-                
 
             except ValueError:
+                
                 print("Erreur de date recommence")
                 return
 
             #choosen_date1 = "2025-09-27"
-            choosen_date1_string = f"{choice1.split("-")[2]}-{choice1.split("-")[1]}-{choice1.split("-")[0]}"
-            choosen_date2_string = f"{choice2.split("-")[2]}-{choice2.split("-")[1]}-{choice2.split("-")[0]}"
+            choosen_date1_string = f"{choice1.split("-")[0]}-{choice1.split("-")[1]}-{choice1.split("-")[2]}"
+            choosen_date2_string = f"{choice2.split("-")[0]}-{choice2.split("-")[1]}-{choice2.split("-")[2]}"
 
             #choosen_date2 = self.today_date
             #choosen_date1 = datetime(2026, 1, 1)
@@ -474,6 +487,7 @@ class GenerateData():
                 my_date = dtt.date(int(self.all_date_of_application_good_format[-1].split("-")[0]),int(self.all_date_of_application_good_format[-1].split("-")[1]),int(self.all_date_of_application_good_format[-1].split("-")[2]))
                 weekday_name = calendar.day_name[my_date.weekday()]
                 self.list_of_application_by_day_name.append(self.weekday_name_english_to_french[weekday_name])
+                
                 if line[0].split(" ")[2] == "AM":
                     if int(line[0].split(" ")[1].split(":")[0]) < 12:
                         self.list_of_application_by_hour.append(str(int(line[0].split(" ")[1].split(":")[0]) + 9))
@@ -485,7 +499,8 @@ class GenerateData():
                         self.list_of_application_by_hour.append(str(int(line[0].split(" ")[1].split(":")[0]) - 3))
                     else:
                         self.list_of_application_by_hour.append(str(int(line[0].split(" ")[1].split(":")[0]) + 9))
-                                 
+                
+                
                 if weekday_name not in ["Saturday","Sunday"]:
                     self.all_date_of_application_good_format_excluding_weekend_day.append(self.convert_date_to_right_format(line[0].split(",")[0],True))
 
@@ -512,7 +527,7 @@ class GenerateData():
         self.data_dict["number_of_application"] = len(self.list_of_company)
         if len(self.list_of_company) == 0:
             print("Désole tu n'a pas postulé une seul fois durant cette période")
-            return
+            return []
         self.data_dict["all_company"] = list(set(self.list_of_company))
         self.data_dict["number_of_company"] = len(list(set(self.list_of_company)))
         self.data_dict["all_job_name"] = list(set(self.list_of_job_name))
@@ -556,11 +571,9 @@ class GenerateData():
         self.data_dict["number_of_application_by_day_name_occurence"] = self.sort_list_by_occurence(self.list_of_application_by_day_name,list(set(self.list_of_application_by_day_name)),False)
         self.data_dict["number_of_application_by_day_name_ratio"] = self.sort_list_by_occurence(self.list_of_application_by_day_name,list(set(self.list_of_application_by_day_name)),True)
         
-        
-
         self.data_dict["number_of_application_by_hour_occurence"] = self.sort_list_by_occurence(self.list_of_application_by_hour,list(set(self.list_of_application_by_hour)),False)
         self.data_dict["number_of_application_by_hour_ratio"] = self.sort_list_by_occurence(self.list_of_application_by_hour,list(set(self.list_of_application_by_hour)),True)
-        
+
         # "number_of_application_by_day_name_occurence":[],
         # "number_of_application_by_day_name_ratio":[],
 
@@ -578,6 +591,7 @@ class GenerateData():
         else:
             day_difference = self.number_of_day_between_two_date(choosen_date2_string,choosen_date1_string)
         
+
         self.data_dict["number_of_application_ratio_by_day"] = round(int(self.data_dict["number_of_application"])/day_difference,1)
         if self.data_dict["number_of_application_ratio_by_day"] == 0.0:
             self.data_dict["number_of_application_ratio_by_day"] = round(int(self.data_dict["number_of_application"])/day_difference,5)
@@ -603,6 +617,7 @@ class GenerateData():
             self.application_rate_dict["years"] = round(round(int(self.data_dict["number_of_application"])/day_difference,5) * 365.25)
             self.application_rate_dict["decades"] = round(round(int(self.data_dict["number_of_application"])/day_difference,5) * 3650.25)
 
+
         if hours_time is False:
             self.data_dict["number_of_application_sentence"] = f"Tu as postulé à {int(self.data_dict["number_of_application"])} offre(s) entre le {choosen_date1_string} et le {choosen_date2_string} en {day_difference} jour(s) ce qui fait une  moyenne de {self.application_rate_dict["days"]} candidatures par jours , {self.application_rate_dict["weeks"]} candidatures par semaines , {self.application_rate_dict["months"]} candidatures par mois , {self.application_rate_dict["years"]} candidatures par années , {self.application_rate_dict["decades"]} candidatures par décennies"
         else:
@@ -614,6 +629,7 @@ class GenerateData():
         self.data_dict["number_of_day_you_applied_you_didnt_apply"] = day_difference - len(list(set(self.all_date_of_application)))
         self.data_dict["number_of_day_you_applied_you_didnt_apply_rate"] = round((day_difference - len(list(set(self.all_date_of_application))))/day_difference , 1) * 100
         
+        # self.write_into_json_file("data.json",self.data_dict)
         
         weekday_day_nb = self.get_number_of_weekend_day_between_two_dates(choosen_date1_string,choosen_date2_string,choosen_date1)
 
@@ -624,8 +640,7 @@ class GenerateData():
         self.data_dict["number_of_day_you_applied_excluding_weekend_rate"] = round(len(list(set(self.all_date_of_application_good_format_excluding_weekend_day)))/(day_difference - weekday_day_nb) , 1) * 100
         self.data_dict["number_of_day_you_didnt_apply_excluding_weekend"] = day_difference - len(list(set(self.all_date_of_application_good_format_excluding_weekend_day))) - weekday_day_nb
         self.data_dict["number_of_day_you_didnt_apply_excluding_weekend_rate"] = round((day_difference - len(list(set(self.all_date_of_application_good_format_excluding_weekend_day))) - weekday_day_nb)/(day_difference - weekday_day_nb) , 1) * 100
-
-        self.write_into_json_file("data.json",self.data_dict)        
+        
         
         # Heures
         # Jours
@@ -638,7 +653,9 @@ class GenerateData():
         # "number_of_day_you_applied_you_didnt_apply":0,
         # "number_of_day_you_applied_you_didnt_apply_rate":0,
 
-        print_dict = True
+        self.write_into_json_file("data.json",self.data_dict)        
+        
+        print_dict = False
         if print_dict:
             for a , b in self.data_dict.items():
                 try:
@@ -648,7 +665,9 @@ class GenerateData():
                         print(f"{a}   {b}")
                 except:
                     print(f"{a}   {b}")
+            
 
+        return self.data_dict
             # print(list(set(self.list_of_question_withouth_anser)))
         # self.sort_list_by_occurence2(list(set(self.list_of_job_name)),list(set(self.list_of_word)),True)
 
