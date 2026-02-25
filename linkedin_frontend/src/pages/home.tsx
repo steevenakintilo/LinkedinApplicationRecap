@@ -9,7 +9,6 @@ const HomePage = () => {
   const [max_date_choosen, setMax_date] = useState("");
   const [min_date_to_choose_possible, setMin_date_possible_to_choose] = useState("");
   const [max_date_to_choose_possible, setMax_date_possible_to_choose] = useState("");
-  const [linkedin_data, setLinkedin_data] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,12 +32,11 @@ const HomePage = () => {
 
        
       //console.log(Object.keys(linkedin_retrieved_data.jsonData).length)
-      setLinkedin_data(linkedin_retrieved_data.jsonData)
-      console.log("tototot " , linkedin_data.length);
+      console.log("tototot " , linkedin_retrieved_data);
       console.log(typeof(linkedin_retrieved_data.jsonData))
       if (Object.keys(linkedin_retrieved_data.jsonData).length > 10) {
         alert("La data a bien été generé")
-        navigate('/display_data',{state: linkedin_data});
+        navigate('/display_data',{state: linkedin_retrieved_data.jsonData});
         
       } else if (linkedin_retrieved_data.message === "Not enough data on the given date") {
         alert("Tu n'as postuler entre les 2 dates choisies, choisis en d'autre.")  

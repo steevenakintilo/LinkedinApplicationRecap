@@ -27,11 +27,7 @@ def retrieve_json_and_get_data(request):
             #print(type(dataRecieved[0]))
             jsonData = linkedin_data.main_function(dataRecieved[0],dataRecieved[1])            
             
-            print(type(jsonData))
             json_str = json.dumps(jsonData, indent=4,ensure_ascii=False)
-            print("dikpokfoperikfopze goood data")
-            print(len(str(json_str)))
-            print(type(json_str))
             if len(str(json_str)) < 5:
                 return JsonResponse({"jsonData": "", 'message': 'Not enough data on the given date'},status =400)
             print("ici")

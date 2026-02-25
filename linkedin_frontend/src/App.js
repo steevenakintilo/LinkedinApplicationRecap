@@ -2,8 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import HomePage from './pages/home.tsx';
-import DataDisplay from './pages/datadisplay.tsx'
-import Totos from './pages/toto.tsx';
+import DataDisplay from './pages/datadisplay.tsx';
 
 function App() {
   return (
@@ -11,7 +10,7 @@ function App() {
       <BrowserRouter>    
         <Routes>
           <Route path="/" element={<HomePage/>} />
-          <Route path="/display_data" element={<Totos/>} />
+          <Route path="/display_data" element={<DataDisplay/>} />
         </Routes>
       </BrowserRouter>
       

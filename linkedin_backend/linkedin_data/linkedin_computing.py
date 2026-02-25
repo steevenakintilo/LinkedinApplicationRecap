@@ -11,6 +11,7 @@ from datetime import datetime
 class GenerateData():
     """GenerateData Class"""
     def __init__(self):
+        self.linkedin_filepath = os.getcwd().replace(r"\linkedin_backend",r"\core\archive_filepath.txt")
         self.archive_filepath : str = self.get_content_of_a_txt_file()
         self.filedata : list[list[str]] = []
         self.application_files_list : list[str] = []
@@ -21,12 +22,14 @@ class GenerateData():
         self.list_of_word: list[str] = []
         self.all_date_of_application: list[str] = []
         self.all_date_of_application_good_format: list[str] = []
+        self.all_date_of_application_good_format2: list[str] = []
         self.all_date_of_application_good_format_excluding_weekend_day: list[str] = []
         self.lowest_date_of_application : str = ""
         self.last_date_of_application : str = ""
-        self.list_of_application_by_day_name : list[str] = []
-        self.list_of_application_by_hour : list[str] = []
+        self.list_of_application_per_day_name : list[str] = []
+        self.list_of_application_per_hour : list[str] = []
         self.list_of_question: list[str] = []
+        self.number_of_question_per_application: list[int] = []
         self.application_rate_dict : dict[str:int] = {
             "hours":0,
             "days":0,
@@ -47,40 +50,60 @@ class GenerateData():
         }
 
         self.today_date : datetime.date = datetime.now().date()
+        self.number_of_application_with_question : int = 0
+        self.number_of_application_withouth_question : int = 0
+        
         self.data_dict = {
             "number_of_application":0,
-            "number_of_application_ratio_by_day":[],
+            "number_of_application_ratio_per_day":[],
             "number_of_application_ratio":{},
             "number_of_application_sentence":"",
-            "number_of_application_by_day_name_occurence":[],
-            "number_of_application_by_day_name_ratio":[],
-            "number_of_application_by_hour_occurence":[],
-            "number_of_application_by_hour_ratio":[],
+            "number_of_application_per_day_name_value":[],
+            "number_of_application_per_day_name_occurence":[],
+            "number_of_application_per_day_name_ratio":[],
+            "number_of_application_per_hour_value":[],
+            "number_of_application_per_hour_occurence":[],
+            "number_of_application_per_hour_ratio":[],
             
             "first_application_date":"",
             "last_application_date":"",
             "all_company": [],
             "number_of_company":0,
-            "number_of_time_you_applied_to_a_company":[],
+            "number_of_time_you_applied_to_a_company_value":[],
+            "number_of_time_you_applied_to_a_company_occurence":[],
             "number_of_time_you_applied_to_a_company_ratio":[],
             "all_job_name":[],
             "number_of_different_job_name":[],
-            "number_of_time_you_applied_to_a_job_name":[],
+            "number_of_time_you_applied_to_a_job_name_value":[],
+            "number_of_time_you_applied_to_a_job_name_occurence":[],
             "number_of_time_you_applied_to_a_job_name_ratio":[],
             "all_word":[],
             "number_of_different_word":0,
             "number_of_word":0,
+            "all_word_sorted_value":[],
             "all_word_occurence":[],
             "all_word_occurence_ratio":[],
-            "all_word_occurence_to_job_name":[],
+            "all_word_occurence_to_job_name_value":[],
+            "all_word_occurence_to_job_name_occurence":[],
             "all_word_occurence_to_job_name_ratio":[],
             "all_question":[],
+            "all_question_sorted_value":[],
             "all_question_occurence":[],
             "all_question_occurence_ratio":[],
-
+            "number_of_question":0,
+            "number_of_different_question":0,
+            "number_of_application_with_question":0,
+            "number_of_application_withouth_question":0,
+            "number_of_application_with_question_ratio":0,
+            "number_of_application_withouth_question_ratio":0,
             "application_day_streak_occurence":[],
             "application_day_streak_value":[],
 
+            "number_of_question_per_application_value":[],
+            "number_of_question_per_application_occurence":[],
+            "number_of_question_per_application_ratio":[],
+
+            
             "application_day_streak_excluding_weekend_occurence":[],
             "application_day_streak_excluding_weekend_value":[],
 
@@ -123,7 +146,7 @@ class GenerateData():
 
     def get_content_of_a_txt_file(self):
         """A function that get the content of txt file"""
-        f = open(fr"C:\Users\sakin\Desktop\code\LinkedinApplicationRecap\core\archive_filepath.txt", 'r',encoding="utf-8")
+        f = open(fr"{self.linkedin_filepath}", 'r',encoding="utf-8")
         content = f.read()
         f.close()
         return content
@@ -164,7 +187,7 @@ class GenerateData():
 
         return f"{lowest_split_date[1]}-{lowest_split_date[0]}-20{lowest_split_date[2]}"
 
-    def sort_list_by_occurence(self,total_list,short_list,rate=False,return_more_data=False):
+    def sort_list_per_occurence(self,total_list,short_list,rate=False,return_more_data=False):
         "A function that sort list by occurence"
         list_of_element : list[str] = []
         occurence_of_element_list : list[int] = []
@@ -194,13 +217,14 @@ class GenerateData():
 
         if return_more_data and rate is False:
             return list_of_element , occurence_of_element_list
-
+        
+        reminder = 2
         divider = len(total_list)
         for elem , occurence_of_elem in zip(list_of_element,occurence_of_element_list):
             if rate:
     #            print(f"TRUE {elem} {occurence_of_elem} {round(((occurence_of_elem/divider) * 100) , 2)}")
-                result_list.append(f"{elem} {round(((occurence_of_elem/divider) * 100) , 2)}")
-                ratio_of_element_list.append(round(((occurence_of_elem/divider) * 100) , 2))
+                result_list.append(f"{elem} {round(((occurence_of_elem/divider) * 100) , reminder)}")
+                ratio_of_element_list.append(round(((occurence_of_elem/divider) * 100) , reminder))
             else:
                 result_list.append(f"{elem} {occurence_of_elem}")
     #            print(f"FALSE {elem} {occurence_of_elem}")
@@ -331,7 +355,7 @@ class GenerateData():
         return list_of_streak , list_of_streak_occurence
 
 
-    def sort_list_by_occurence2(self,total_list,short_list,rate=False):
+    def sort_list_per_occurence2(self,total_list,short_list,rate=False,return_more_data=False):
         "A function that sort list by occurence"
         list_of_element : list[str] = []
         occurence_of_element_list : list[int] = []
@@ -354,19 +378,27 @@ class GenerateData():
         
         list_of_element = list(list_of_element)
         occurence_of_element_list = list(occurence_of_element_list)
-
+        ratio_of_element_list = []
         # print(list_of_element[0:10])
         # print(occurence_of_element_list[0:10])
         # print(len(total_list))
         # print(len(short_list))
+
+
+        if return_more_data and rate is False:
+            return list_of_element , occurence_of_element_list
+
         divider = len(total_list)
         for elem , occurence_of_elem in zip(list_of_element,occurence_of_element_list):
             if rate:
 #                print(f"TRUE {elem} {occurence_of_elem} {round(((occurence_of_elem/divider) * 100) , 2)}")
                 result_list.append(f"{elem} {round(((occurence_of_elem/divider) * 100) , 2)}")
+                ratio_of_element_list.append(round(((occurence_of_elem/divider) * 100) , 2))
             else:
                 result_list.append(f"{elem} {occurence_of_elem}")
- #               print(f"FALSE {elem} {occurence_of_elem}")
+#               print(f"FALSE {elem} {occurence_of_elem}")
+        if return_more_data and rate:
+            return list_of_element , ratio_of_element_list
 
         return result_list
 
@@ -385,7 +417,7 @@ class GenerateData():
             current_day = str(date1_datetime_format + dtt.timedelta(days=(i))).split(" ")[0]            
             my_date = dtt.date(int(current_day.split("-")[0]),int(current_day.split("-")[1]),int(current_day.split("-")[2]))
             weekday_name = calendar.day_name[my_date.weekday()]
-            self.list_of_application_by_day_name.append(self.weekday_name_english_to_french[weekday_name])
+            self.list_of_application_per_day_name.append(self.weekday_name_english_to_french[weekday_name])
             if weekday_name in ["Saturday","Sunday"]:
                 weekday_day_nb+=1
             #streak_start = str(datetime(split_date[0], split_date[1], split_date[2]) - dtt.timedelta(days=(index - 1))).split(" ")[0]
@@ -409,6 +441,29 @@ class GenerateData():
         self.last_date_of_application = self.get_the_lowest_date_of_a_list(True)
         return self.lowest_date_of_application , self.last_date_of_application
     
+
+    def count_the_number_of_question_of_a_string(self,question_string,forbiden_words_for_question):
+        "A function that count the number of a question from a string"
+
+        number_of_question = 0
+        question_string = question_string.lower()
+        for lin in question_string.split("|"):
+            if len(lin) > 1:
+                for words in forbiden_words_for_question:
+                    if words in lin.lower():
+                        number_of_question-=1
+                        break
+                #if find:
+                #    break
+                number_of_question+=1
+            else:
+                return 1
+        
+        if number_of_question <= 0:
+            number_of_question = 0
+        
+        return number_of_question
+     
     def main_function(self,choosen_date1="",choosen_date2=""):
         """A function that compute the whole data"""
         #disclamer_choice = input("Ecrit 1234 pour ne pas avoir à choisir de date sinon presse entrer: ")
@@ -467,7 +522,7 @@ class GenerateData():
             #choosen_date2 = datetime(2026, 2, 20)
 
 
-        forbiden_words_for_question = ['email address', 'mobile phone number', 'adresse e-mail', 'numéro de téléphone', 'your title:ingénieur', 'degree:', 'school:', 'location (city)', 'pdf', ' description:', 'your title:', 'of study:', 'teléfono móvil', 'company:', '@', 'employment:', 'letter:',"diploma:","last name","first name","description:"]
+        forbiden_words_for_question = ['email address', 'mobile phone number', 'adresse e-mail', 'numéro de téléphone', 'your title:ingénieur', 'degree:', 'school:', 'location (city)', '.pdf', ' description:', 'your title:', 'of study:', 'teléfono móvil', 'company:', '@', 'employment:', 'letter:',"diploma:","last name","first name","description:"]
         forbiden_words_for_word = ["on","in","en","ne","de","se","x","#","|","-","_","&"]
         all_jobs_files = os.listdir(rf"{self.archive_filepath}\Jobs")
         for file in all_jobs_files:
@@ -483,22 +538,23 @@ class GenerateData():
                 self.list_of_job_name.append(line[4].lower())
                 self.all_date_of_application.append(line[0].split(",")[0])
                 self.all_date_of_application_good_format.append(self.convert_date_to_right_format(line[0].split(",")[0],True))
-
+                self.all_date_of_application_good_format2.append(self.convert_date_to_right_format(line[0].split(",")[0],True))
+                
                 my_date = dtt.date(int(self.all_date_of_application_good_format[-1].split("-")[0]),int(self.all_date_of_application_good_format[-1].split("-")[1]),int(self.all_date_of_application_good_format[-1].split("-")[2]))
                 weekday_name = calendar.day_name[my_date.weekday()]
-                self.list_of_application_by_day_name.append(self.weekday_name_english_to_french[weekday_name])
+                self.list_of_application_per_day_name.append(self.weekday_name_english_to_french[weekday_name])
                 
                 if line[0].split(" ")[2] == "AM":
                     if int(line[0].split(" ")[1].split(":")[0]) < 12:
-                        self.list_of_application_by_hour.append(str(int(line[0].split(" ")[1].split(":")[0]) + 9))
+                        self.list_of_application_per_hour.append(str(int(line[0].split(" ")[1].split(":")[0]) + 9))
                     else:
-                        self.list_of_application_by_hour.append(str(int(line[0].split(" ")[1].split(":")[0]) - 3)) 
+                        self.list_of_application_per_hour.append(str(int(line[0].split(" ")[1].split(":")[0]) - 3)) 
                     
                 else:
                     if int(line[0].split(" ")[1].split(":")[0]) in [10,11]:
-                        self.list_of_application_by_hour.append(str(int(line[0].split(" ")[1].split(":")[0]) - 3))
+                        self.list_of_application_per_hour.append(str(int(line[0].split(" ")[1].split(":")[0]) - 3))
                     else:
-                        self.list_of_application_by_hour.append(str(int(line[0].split(" ")[1].split(":")[0]) + 9))
+                        self.list_of_application_per_hour.append(str(int(line[0].split(" ")[1].split(":")[0]) + 9))
                 
                 
                 if weekday_name not in ["Saturday","Sunday"]:
@@ -508,6 +564,16 @@ class GenerateData():
                     if len(word) > 0 and word.lower() not in forbiden_words_for_word and word.isdigit() is False:
                         self.list_of_word.append(word.lower())
 
+                
+                if len(line[7]) == 0:
+                    self.number_of_application_withouth_question+=1
+                else:
+                    if self.count_the_number_of_question_of_a_string(line[7],forbiden_words_for_question) > 0:
+                        self.number_of_question_per_application.append(self.count_the_number_of_question_of_a_string(line[7],forbiden_words_for_question))
+                        self.number_of_application_with_question+=1
+                    else:
+                        self.number_of_application_withouth_question+=1
+                
                 for lin in line[7].split("|"):
                     if len(lin) > 1:
                         find = False
@@ -536,20 +602,7 @@ class GenerateData():
         self.data_dict["number_of_different_word"] = len(list(set(self.list_of_word)))
         self.data_dict["number_of_word"] = len(list(self.list_of_word))
         self.data_dict["all_question"] = list(set(self.list_of_question_withouth_anser))
-        self.data_dict["number_of_time_you_applied_to_a_company"] = self.sort_list_by_occurence(self.list_of_company,list(set(self.list_of_company)),False)
-        self.data_dict["number_of_time_you_applied_to_a_company_ratio"] = self.sort_list_by_occurence(self.list_of_company,list(set(self.list_of_company)),True)
-        self.data_dict["number_of_time_you_applied_to_a_job_name"] = self.sort_list_by_occurence(self.list_of_job_name,list(set(self.list_of_job_name)),False)
-        self.data_dict["number_of_time_you_applied_to_a_job_name_ratio"] = self.sort_list_by_occurence(self.list_of_job_name,list(set(self.list_of_job_name)),True)
-        self.data_dict["all_word_occurence"] = self.sort_list_by_occurence(self.list_of_word,list(set(self.list_of_word)),False)
-        self.data_dict["all_word_occurence_to_job_name"] = self.sort_list_by_occurence2(list(set(self.list_of_job_name)),list(set(self.list_of_word)),False)
-        self.data_dict["all_word_occurence_ratio"] = self.sort_list_by_occurence(self.list_of_word,list(set(self.list_of_word)),True)
-        self.data_dict["all_word_occurence_to_job_name_ratio"] = self.sort_list_by_occurence2(list(set(self.list_of_job_name)),list(set(self.list_of_word)),True)
-        self.data_dict["all_question_occurence"] = self.sort_list_by_occurence(self.list_of_question_withouth_anser,list(set(self.list_of_question_withouth_anser)),False)
-        self.data_dict["all_question_occurence_ratio"] = self.sort_list_by_occurence(self.list_of_question_withouth_anser,list(set(self.list_of_question_withouth_anser)),True)
-        self.data_dict["number_of_time_you_applied_to_a_job_name"] = self.sort_list_by_occurence(self.list_of_job_name,list(set(self.list_of_job_name)),False)
-        self.data_dict["all_day_application_occurence"] ,self.data_dict["all_day_application_occurence_rate"] = self.sort_list_by_occurence(self.all_date_of_application_good_format,list(set(self.all_date_of_application_good_format)),False,True)
-        self.data_dict["all_day_application_occurence_rate_value"] = self.sort_list_by_occurence(self.all_date_of_application_good_format,list(set(self.all_date_of_application_good_format)),True,True)[1]
-        self.data_dict["day_with_the_most_application"] = self.data_dict["all_day_application_occurence"][0]
+
         self.lowest_date_of_application = self.get_the_lowest_date_of_a_list()
         self.last_date_of_application = self.get_the_lowest_date_of_a_list(True)
         self.data_dict["first_application_date"] = self.lowest_date_of_application
@@ -568,14 +621,67 @@ class GenerateData():
         self.data_dict["non_application_day_streak_value"] = self.compute_non_day_streak(self.all_date_of_application_good_format)[0]
         self.data_dict["non_application_day_streak_excluding_weekend_occurence"] = self.compute_non_day_streak(self.all_date_of_application_good_format,True)[1]
         self.data_dict["non_application_day_streak_excluding_weekend_value"] = self.compute_non_day_streak(self.all_date_of_application_good_format,True)[0]
-        self.data_dict["number_of_application_by_day_name_occurence"] = self.sort_list_by_occurence(self.list_of_application_by_day_name,list(set(self.list_of_application_by_day_name)),False)
-        self.data_dict["number_of_application_by_day_name_ratio"] = self.sort_list_by_occurence(self.list_of_application_by_day_name,list(set(self.list_of_application_by_day_name)),True)
         
-        self.data_dict["number_of_application_by_hour_occurence"] = self.sort_list_by_occurence(self.list_of_application_by_hour,list(set(self.list_of_application_by_hour)),False)
-        self.data_dict["number_of_application_by_hour_ratio"] = self.sort_list_by_occurence(self.list_of_application_by_hour,list(set(self.list_of_application_by_hour)),True)
+        self.data_dict["number_of_application_per_day_name_value"] = self.sort_list_per_occurence(self.list_of_application_per_day_name,list(set(self.list_of_application_per_day_name)),False,True)[0]
+        self.data_dict["number_of_application_per_day_name_occurence"] = self.sort_list_per_occurence(self.list_of_application_per_day_name,list(set(self.list_of_application_per_day_name)),False,True)[1]
+        self.data_dict["number_of_application_per_day_name_ratio"] = self.sort_list_per_occurence(self.list_of_application_per_day_name,list(set(self.list_of_application_per_day_name)),True,True)[1]
+        
 
-        # "number_of_application_by_day_name_occurence":[],
-        # "number_of_application_by_day_name_ratio":[],
+        self.data_dict["number_of_application_per_hour_value"] = self.sort_list_per_occurence(self.list_of_application_per_hour,list(set(self.list_of_application_per_hour)),False,True)[0]
+        self.data_dict["number_of_application_per_hour_occurence"] = self.sort_list_per_occurence(self.list_of_application_per_hour,list(set(self.list_of_application_per_hour)),False,True)[1]
+        self.data_dict["number_of_application_per_hour_ratio"] = self.sort_list_per_occurence(self.list_of_application_per_hour,list(set(self.list_of_application_per_hour)),True,True)[1]
+
+
+        self.data_dict["number_of_time_you_applied_to_a_company_value"] = self.sort_list_per_occurence(self.list_of_company,list(set(self.list_of_company)),False,True)[0]
+        self.data_dict["number_of_time_you_applied_to_a_company_occurence"] = self.sort_list_per_occurence(self.list_of_company,list(set(self.list_of_company)),False,True)[1]
+        self.data_dict["number_of_time_you_applied_to_a_company_ratio"] = self.sort_list_per_occurence(self.list_of_company,list(set(self.list_of_company)),True,True)[1]
+        
+        
+        
+        self.data_dict["number_of_time_you_applied_to_a_job_name_value"] = self.sort_list_per_occurence(self.list_of_job_name,list(set(self.list_of_job_name)),False,True)[0]
+        self.data_dict["number_of_time_you_applied_to_a_job_name_occurence"] = self.sort_list_per_occurence(self.list_of_job_name,list(set(self.list_of_job_name)),False,True)[1]
+        self.data_dict["number_of_time_you_applied_to_a_job_name_ratio"] = self.sort_list_per_occurence(self.list_of_job_name,list(set(self.list_of_job_name)),True,True)[1]
+        
+        self.data_dict["all_word_sorted_value"] = self.sort_list_per_occurence(self.list_of_word,list(set(self.list_of_word)),False,True)[0]
+        self.data_dict["all_word_occurence"] = self.sort_list_per_occurence(self.list_of_word,list(set(self.list_of_word)),False,True)[1]
+        self.data_dict["all_word_occurence_ratio"] = self.sort_list_per_occurence(self.list_of_word,list(set(self.list_of_word)),True,True)[1]
+        
+
+        self.data_dict["all_word_occurence_to_job_name_value"] = self.sort_list_per_occurence2(list(set(self.list_of_job_name)),list(set(self.list_of_word)),False,True)[0]
+        self.data_dict["all_word_occurence_to_job_name_occurence"] = self.sort_list_per_occurence2(list(set(self.list_of_job_name)),list(set(self.list_of_word)),False,True)[1]
+        self.data_dict["all_word_occurence_to_job_name_ratio"] = self.sort_list_per_occurence2(list(set(self.list_of_job_name)),list(set(self.list_of_word)),True,True)[1]
+        
+
+        self.data_dict["all_question_sorted_value"] = self.sort_list_per_occurence(self.list_of_question_withouth_anser,list(set(self.list_of_question_withouth_anser)),False,True)[0]
+        self.data_dict["all_question_occurence"] = self.sort_list_per_occurence(self.list_of_question_withouth_anser,list(set(self.list_of_question_withouth_anser)),False,True)[1]
+        self.data_dict["all_question_occurence_ratio"] = self.sort_list_per_occurence(self.list_of_question_withouth_anser,list(set(self.list_of_question_withouth_anser)),True,True)[1]
+        
+
+        self.data_dict["number_of_question_per_application_value"] = self.sort_list_per_occurence(self.number_of_question_per_application,list(set(self.number_of_question_per_application)),False,True)[0]
+        self.data_dict["number_of_question_per_application_occurence"] = self.sort_list_per_occurence(self.number_of_question_per_application,list(set(self.number_of_question_per_application)),False,True)[1]
+        self.data_dict["number_of_question_per_application_ratio"] = self.sort_list_per_occurence(self.number_of_question_per_application,list(set(self.number_of_question_per_application)),True,True)[1]
+        
+        self.data_dict["number_of_question"] = len(self.list_of_question_withouth_anser)
+        self.data_dict["number_of_different_question"] = len(list(set(self.list_of_question_withouth_anser)))
+        
+
+        self.data_dict["number_of_application_with_question"] = self.number_of_application_with_question
+        self.data_dict["number_of_application_withouth_question"] = self.number_of_application_withouth_question
+        
+        self.data_dict["number_of_application_withouth_question_ratio"] = round(self.number_of_application_withouth_question/len(self.list_of_company) , 2) * 100
+        self.data_dict["number_of_application_with_question_ratio"] = round(self.number_of_application_with_question/len(self.list_of_company) , 2) * 100
+        
+                
+        
+
+        self.data_dict["all_day_application_occurence"] = self.sort_list_per_occurence(self.all_date_of_application_good_format2,list(set(self.all_date_of_application_good_format2)),False,True)[1]
+        self.data_dict["all_day_application_occurence_rate"] = self.sort_list_per_occurence(self.all_date_of_application_good_format2,list(set(self.all_date_of_application_good_format2)),True,True)[1]
+        self.data_dict["all_day_application_occurence_rate_value"] = self.sort_list_per_occurence(self.all_date_of_application_good_format,list(set(self.all_date_of_application_good_format)),True,True)[0]
+        
+        self.data_dict["day_with_the_most_application"] = self.data_dict["all_day_application_occurence_rate_value"][0]
+        
+        # "number_of_application_per_day_name_occurence":[],
+        # "number_of_application_per_day_name_ratio":[],
 
         # ici aussi
 
@@ -592,9 +698,9 @@ class GenerateData():
             day_difference = self.number_of_day_between_two_date(choosen_date2_string,choosen_date1_string)
         
 
-        self.data_dict["number_of_application_ratio_by_day"] = round(int(self.data_dict["number_of_application"])/day_difference,1)
-        if self.data_dict["number_of_application_ratio_by_day"] == 0.0:
-            self.data_dict["number_of_application_ratio_by_day"] = round(int(self.data_dict["number_of_application"])/day_difference,5)
+        self.data_dict["number_of_application_ratio_per_day"] = round(int(self.data_dict["number_of_application"])/day_difference,1)
+        if self.data_dict["number_of_application_ratio_per_day"] == 0.0:
+            self.data_dict["number_of_application_ratio_per_day"] = round(int(self.data_dict["number_of_application"])/day_difference,5)
         
         hours_time = False
         if round(int(self.data_dict["number_of_application"])/day_difference) > 24:
@@ -669,7 +775,7 @@ class GenerateData():
 
         return self.data_dict
             # print(list(set(self.list_of_question_withouth_anser)))
-        # self.sort_list_by_occurence2(list(set(self.list_of_job_name)),list(set(self.list_of_word)),True)
+        # self.sort_list_per_occurence2(list(set(self.list_of_job_name)),list(set(self.list_of_word)),True)
 
         #print(list(set(self.list_of_word)))
         # print(self.list_of_word)
