@@ -71,10 +71,10 @@ const HomePage = () => {
     }
     
     return (
-      <div>
-        <h1 className="toto">LinkedinApplicationRecap</h1>
+      <div className="backgroundcolour">
+        <h1 className="nice_font">LinkedinApplicationRecap</h1>
 
-        <h2 className="toto">Pour comprendre comment marche le site lis d'abord <a href={'https://github.com/steevenakintilo/LinkedinApplicationRecap'} target="_blank">ça</a> </h2>
+        <h2 className="nice_font">Pour comprendre comment marche le site lis d'abord <a href={'https://github.com/steevenakintilo/LinkedinApplicationRecap'} target="_blank">ça</a> </h2>
         
 
         <input 

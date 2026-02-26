@@ -1,8 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Cascadia+Mono:ital,wght@0,200..700;1,200..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 .backgroundcolour {
-  background-color: #F3F2EF;
+  background-color: #f3f2ef0e;
   width: 100%;
 }
 
-.toto {
-    font-family: "Segoe UI";
+
+.nice_font {
+    font-family: "Inter";
+    font-weight: normal;
 }

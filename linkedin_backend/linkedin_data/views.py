@@ -25,6 +25,8 @@ def retrieve_json_and_get_data(request):
             dataRecieved = json.loads(dataRecieved.decode()) 
             #dict_obj = pickle.loads(dataRecieved)
             #print(type(dataRecieved[0]))
+            print(dataRecieved[0],dataRecieved[1])
+            dataRecieved = ["2025-09-27" , "2026-02-19"]
             jsonData = linkedin_data.main_function(dataRecieved[0],dataRecieved[1])            
             
             json_str = json.dumps(jsonData, indent=4,ensure_ascii=False)
