@@ -35,7 +35,7 @@ const HomePage = () => {
       console.log("tototot " , linkedin_retrieved_data);
       console.log(typeof(linkedin_retrieved_data.jsonData))
       if (Object.keys(linkedin_retrieved_data.jsonData).length > 10) {
-        alert("La data a bien été generé")
+        // alert("La data a bien été generé")
         navigate('/display_data',{state: linkedin_retrieved_data.jsonData});
         
       } else if (linkedin_retrieved_data.message === "Not enough data on the given date") {

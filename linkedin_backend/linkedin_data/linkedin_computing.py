@@ -35,8 +35,11 @@ class GenerateData():
         self.number_of_application_on_odd_day : int = 0
         self.number_of_application_on_even_day : int = 0
         
+        self.number_of_day_between_first_and_last_application : int = 0
         self.list_of_question: list[str] = []
         self.number_of_question_per_application: list[int] = []
+        self.number_of_question_per_application2: list[int] = []
+        
         self.application_rate_dict : dict[str:int] = {
             "hours":0,
             "days":0,
@@ -147,6 +150,12 @@ class GenerateData():
             "number_of_question_per_application_occurence":[],
             "number_of_question_per_application_ratio":[],
 
+            "number_of_question_per_application_value2":[],
+            "number_of_question_per_application_occurence2":[],
+            "number_of_question_per_application_ratio2":[],
+            
+            "number_of_question_per_application_value_sorted":[],
+            "number_of_question_per_application_occurence_sorted":[],
             
             "application_day_streak_excluding_weekend_occurence":[],
             "application_day_streak_excluding_weekend_value":[],
@@ -197,8 +206,10 @@ class GenerateData():
 
             "number_of_postualation_on_even_day":0,
             "number_of_postualation_on_even_day_ratio":0,
-            
-            
+            "number_of_day_between_first_and_last_application":0,
+            "number_of_question_in_average_per_application":0,
+            "number_of_question_in_average_per_application_withouth_0":0
+        
             
         }
 
@@ -681,12 +692,15 @@ class GenerateData():
                 
                 if len(line[7]) == 0:
                     self.number_of_application_withouth_question+=1
+                    self.number_of_question_per_application2.append(0)
                 else:
                     if self.count_the_number_of_question_of_a_string(line[7],forbiden_words_for_question) > 0:
                         self.number_of_question_per_application.append(self.count_the_number_of_question_of_a_string(line[7],forbiden_words_for_question))
+                        self.number_of_question_per_application2.append(self.count_the_number_of_question_of_a_string(line[7],forbiden_words_for_question))
                         self.number_of_application_with_question+=1
                     else:
                         self.number_of_application_withouth_question+=1
+                        self.number_of_question_per_application2.append(0)
                 
                 for lin in line[7].split("|"):
                     if len(lin) > 1:
@@ -704,6 +718,7 @@ class GenerateData():
                         self.list_of_question.append(lin.replace('\xa0',''))
                         self.list_of_question_withouth_anser.append(lin.replace('\xa0','').split(":")[0])
 
+        number_of_apply = len(self.list_of_company)
         self.data_dict["number_of_application"] = len(self.list_of_company)
         if len(self.list_of_company) == 0:
             print("Désole tu n'a pas postulé une seul fois durant cette période")
@@ -771,10 +786,52 @@ class GenerateData():
         self.data_dict["all_question_occurence_ratio"] = self.sort_list_per_occurence(self.list_of_question_withouth_anser,list(set(self.list_of_question_withouth_anser)),True,True)[1]
         
 
+
+
+        
+        
         self.data_dict["number_of_question_per_application_value"] = self.sort_list_per_occurence(self.number_of_question_per_application,list(set(self.number_of_question_per_application)),False,True)[0]
         self.data_dict["number_of_question_per_application_occurence"] = self.sort_list_per_occurence(self.number_of_question_per_application,list(set(self.number_of_question_per_application)),False,True)[1]
         self.data_dict["number_of_question_per_application_ratio"] = self.sort_list_per_occurence(self.number_of_question_per_application,list(set(self.number_of_question_per_application)),True,True)[1]
         
+        self.data_dict["number_of_question_per_application_value2"] = self.sort_list_per_occurence(self.number_of_question_per_application2,list(set(self.number_of_question_per_application2)),False,True)[0]
+        self.data_dict["number_of_question_per_application_occurence2"] = self.sort_list_per_occurence(self.number_of_question_per_application2,list(set(self.number_of_question_per_application2)),False,True)[1]
+        self.data_dict["number_of_question_per_application_ratio2"] = self.sort_list_per_occurence(self.number_of_question_per_application2,list(set(self.number_of_question_per_application2)),True,True)[1]
+
+
+        
+        self.data_dict["number_of_question_in_average_per_application"] = round(sum(self.number_of_question_per_application2)/number_of_apply)
+        self.data_dict["number_of_question_in_average_per_application_withouth_0"] = round(sum(self.number_of_question_per_application)/(number_of_apply - self.number_of_application_withouth_question))
+
+        
+        #print((round(sum(self.number_of_question_per_application2)/len(self.number_of_question_per_application2)) , 2) * 100)
+        
+
+        a = self.sort_list_per_occurence(self.number_of_question_per_application,list(set(self.number_of_question_per_application)),False,True)[0]
+        b = self.sort_list_per_occurence(self.number_of_question_per_application,list(set(self.number_of_question_per_application)),False,True)[1]
+        paired = list(zip(b,a))
+
+        paired.sort(key=lambda x: x[1])
+        b , a = zip(*paired)
+        a = list(a)
+        b = list(b)
+        c , d = [] , []            
+
+
+        for i in range(0,a[-1] + 1):
+            if i not in a and i != 0:
+                c.append(i)
+                d.append(0)
+            elif i == 0:
+                c.append(0)
+                d.append(self.number_of_application_withouth_question)
+            else:
+                c.append(i)
+                d.append(b[a.index(i)])
+
+        
+        self.data_dict["number_of_question_per_application_value_sorted"] = c
+        self.data_dict["number_of_question_per_application_occurence_sorted"] = d
         self.data_dict["number_of_question"] = len(self.list_of_question_withouth_anser)
         self.data_dict["number_of_different_question"] = len(list(set(self.list_of_question_withouth_anser)))
         
@@ -830,7 +887,6 @@ class GenerateData():
             self.data_dict["number_of_application_per_distinct_month_rate"] = self.sort_list_by_date(b,a,False,True)[1]
             
             
-            print(a,b,c)
 
 
         if len(list(set(self.list_of_application_per_year))) > 1:
@@ -977,7 +1033,7 @@ class GenerateData():
             self.data_dict["number_of_postualation_on_odd_day"] = self.number_of_application_on_odd_day
             self.data_dict["number_of_postualation_on_odd_ratio"] = round(self.number_of_application_on_odd_day / len(self.list_of_company) , 2)
         
-        
+        self.data_dict["number_of_day_between_first_and_last_application"] = day_difference
         # Heures
         # Jours
         # Semaines

@@ -28,8 +28,8 @@ const DetailedStat = () => {
   // console.log(retrieved_data)
   const navigate = useNavigate();
   
-  function generate_list_of_dict(list_,list2_,list3_) {
-      let list_of_dict = [];
+  function generate_list_of_dict(list_:any,list2_:any,list3_:any) {
+      let list_of_dict:any = [];
 
       list_.forEach((data: string, index : number) => {
         if (data.toLowerCase().includes(text_input.toLowerCase()) === true) {
@@ -42,9 +42,9 @@ const DetailedStat = () => {
 
       return list_of_dict
   }
-  function generate_list(list_,list2_,list3_) {
-    let generated_list = [];
-    list_.forEach((data, index) => {      
+  function generate_list(list_:any,list2_:any,list3_:any) {
+    let generated_list:any = [];
+    list_.forEach((data, index:number) => {      
       if (data.toLowerCase().includes(text_input.toLowerCase()) === true) {
         console.log("ok 1")
         generated_list.push(<li key={index}>{data} {" |     "} {list2_[index]} {" |     "} {list3_[index]}</li>);
@@ -65,8 +65,8 @@ const DetailedStat = () => {
   let datalist = generate_list(retrieved_data[0],retrieved_data[1],retrieved_data[2])
   let data_dict = generate_list_of_dict(retrieved_data[0],retrieved_data[1],retrieved_data[2])
 
-  console.log("kok(opkpo(kop'(kpo")
-  console.log(datalist)
+  console.log("DETAILED STATSSSS")
+  console.log(retrieved_data)
   function go_home() {
     navigate('/');
   }
@@ -107,7 +107,7 @@ const DetailedStat = () => {
           </TableHead>
 
           <TableBody>
-            {data_dict.map((data_dict) => (
+            {data_dict.map((data_dict:any) => (
               <TableRow key={data_dict.data}>
                 <TableCell>{data_dict.data}</TableCell>
                 <TableCell>{data_dict.number}/{retrieved_data[4]}</TableCell>
