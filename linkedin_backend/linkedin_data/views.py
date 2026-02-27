@@ -26,10 +26,20 @@ def retrieve_json_and_get_data(request):
             #dict_obj = pickle.loads(dataRecieved)
             #print(type(dataRecieved[0]))
             print(dataRecieved[0],dataRecieved[1])
-            dataRecieved = ["2025-09-27" , "2026-02-19"]
+            
+            # if len(dataRecieved[0]) < 2:
+            #     dataRecieved = ["2025-09-27" , "2026-02-19"]
+            
             jsonData = linkedin_data.main_function(dataRecieved[0],dataRecieved[1])            
             
             json_str = json.dumps(jsonData, indent=4,ensure_ascii=False)
+
+            if "same" in str(json_str) and len(str(json_str)) == 6:
+                return JsonResponse({"jsonData": "", 'message': 'same date'},status =400)
+            
+            if "little" in str(json_str) and len(str(json_str)) == 8:
+                return JsonResponse({"jsonData": "", 'message': 'date1 bigger than date2'},status =400)
+                
             if len(str(json_str)) < 5:
                 return JsonResponse({"jsonData": "", 'message': 'Not enough data on the given date'},status =400)
             print("ici")

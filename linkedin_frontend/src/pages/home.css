@@ -14,3 +14,15 @@
 .spacer {
   margin-top: 120px;
 }
+
+.positionInBottom {
+    position: 'absolute';
+    display: flex;
+    justify-content: flex-end;
+}
+
+.positionInBottom2 {
+    position: 'absolute';
+    display: flex;
+    justify-content: flex-end;
+}

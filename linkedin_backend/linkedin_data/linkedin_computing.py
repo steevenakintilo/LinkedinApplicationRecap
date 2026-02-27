@@ -24,6 +24,11 @@ class GenerateData():
         self.all_date_of_application_good_format: list[str] = []
         self.all_date_of_application_good_format2: list[str] = []
         self.all_date_of_application_good_format_excluding_weekend_day: list[str] = []
+        self.all_date_of_application_good_format_excluding_weekend_day2: list[str] = []
+        
+        self.number_of_application_on_weekend: int = 0
+        self.number_of_non_application_on_weekend: int = 0
+        
         self.lowest_date_of_application : str = ""
         self.last_date_of_application : str = ""
         self.list_of_application_per_day_name2 : list[str] = []
@@ -70,7 +75,7 @@ class GenerateData():
             "Wednesday":"2002-01-01",
             "Thursday":"2003-01-01",
             "Friday":"2004-01-01",
-            "Saturday":"2005-0-01",
+            "Saturday":"2005-01-01",
             "Sunday":"2006-01-01",
             
         }
@@ -187,7 +192,9 @@ class GenerateData():
             "number_of_application_per_hour_occurence_sorted":[],
             "all_day_application_occurence_rate_value_sorted":[],
             "all_day_application_occurence_sorted":[],
-
+            
+            "all_day_application_occurence_rate_value_sorted2":[],
+            "all_day_application_occurence_sorted2":[],
 
             "number_of_application_per_year_value":[],
             "number_of_application_per_year_occurence":[],
@@ -208,10 +215,20 @@ class GenerateData():
             "number_of_postualation_on_even_day_ratio":0,
             "number_of_day_between_first_and_last_application":0,
             "number_of_question_in_average_per_application":0,
-            "number_of_question_in_average_per_application_withouth_0":0
-        
+            "number_of_question_in_average_per_application_withouth_0":0,
+            "number_of_application_on_weekend":0,
+            "number_of_non_application_on_weekend":0,
+            "rate_of_application_on_non_weekend_day":0,
+            "rate_of_application_on_weekend_day":0,
+            "rate_of_application_based_only_on_weekend_day":0,
+            "rate_of_non_application_based_only_on_weekend_day":0,
+            "weekday_day_nb":0,
+            "choosen_date1":"",
+            "choosen_date2":""
             
         }
+
+
 
     def sort_list_by_date(self,list_of_element , list_of_date,change_back_to_weekday=False,month=False):
         """A function that sort list by date"""
@@ -231,7 +248,15 @@ class GenerateData():
         if change_back_to_weekday:
             list_of_date_ = []
             for dt in list_of_date:
-                list_of_date_.append(self.weekday_name_english_to_french[self.date_to_weekname[dt]])
+                if month:
+                    good_month = dt[-2:]
+                    if good_month[0] == "0":
+                        good_month = good_month[1]
+                    good_month = int(good_month)
+                    list_of_date_.append(self.number_to_month[good_month])
+                else:
+                    list_of_date_.append(self.weekday_name_english_to_french[self.date_to_weekname[dt]])
+            
             return list_of_date_ , list_of_element
         return list_of_date , list_of_element
 
@@ -247,7 +272,7 @@ class GenerateData():
             number_of_day_difference = str(date1_ - date_).split(" ")[0].replace(" ","").strip()
             if str(number_of_day_difference) == "0:00:00":
                 return 0
-        return int(number_of_day_difference)
+        return int(number_of_day_difference) + 1
 
     def get_content_of_a_txt_file(self):
         """A function that get the content of txt file"""
@@ -381,15 +406,23 @@ class GenerateData():
                 #print(current_day,elem,self.number_of_day_between_two_date(elem,current_day))
 
             #print(self.number_of_day_between_two_date(elem,current_day))
-            if self.number_of_day_between_two_date(elem,current_day) == 3 and i != 0 and weekend == True and weekday_name2 == "Friday" and weekday_name == "Monday":
-                index+=3
-            elif self.number_of_day_between_two_date(elem,current_day) == 1 and i != 0:
+            if weekend:
+                #print(i , self.number_of_day_between_two_date(elem,current_day) ,my_date , my_date2 , weekday_name,weekday_name2)
+                #print(elem,current_day,self.number_of_day_between_two_date(elem,current_day) , index)
+                pass
+            # if self.number_of_day_between_two_date(elem,current_day) == 3 and i != 0 and weekend == True and weekday_name2 == "Friday" and weekday_name == "Monday":
+            #     index+=3
+            
+            if self.number_of_day_between_two_date(elem,current_day) == 1 and i != 0:
                 index+=1
             elif i != 0:
                 split_date = list(map(int , current_day.split("-")))
                 streak_start = str(datetime(split_date[0], split_date[1], split_date[2]) - dtt.timedelta(days=(index - 1))).split(" ")[0]
                 list_of_streak.append(f"{streak_start}:{current_day}")
-                if index > 5:
+                # if weekend:
+                #     print(list_of_streak , "zob ")
+                
+                if index > 5 and weekend is False:
                     index-=2
                 list_of_streak_occurence.append(index)
                 index = 1
@@ -397,6 +430,9 @@ class GenerateData():
 
 
 
+        # print(list_of_streak , len(list_of_streak), weekend)
+        # print(list_of_streak_occurence , len(list_of_streak) , weekend)
+        
         paired = list(zip(list_of_streak, list_of_streak_occurence))
 
         paired.sort(key=lambda x: x[1], reverse=True)
@@ -516,6 +552,7 @@ class GenerateData():
         f.close()
 
     def get_number_of_weekend_day_between_two_dates(self,date1,date2,date1_datetime_format):
+        "A function that get the number of weekend day between two dates"
         weekday_day_nb = 0
         day_difference = self.number_of_day_between_two_date(date2,date1)
         for i in range(day_difference):
@@ -605,10 +642,10 @@ class GenerateData():
                 choosen_date2 = datetime(int(choice2.split("-")[0]), int(choice2.split("-")[1]), int(choice2.split("-")[2]))
                 if choosen_date1 == choosen_date2:
                     print("Les dates ne peuvent pas être les mêmes")
-
+                    return "same"
                 if choosen_date1 > choosen_date2:
                     print("La date 1 doit être supérieur à la date 2")
-
+                    return "little"
             except ValueError:
                 
                 print("Erreur de date recommence")
@@ -626,6 +663,9 @@ class GenerateData():
             
             #choosen_date2 = datetime(2026, 2, 20)
 
+
+        self.data_dict["choosen_date1"] = choosen_date1_string
+        self.data_dict["choosen_date2"] = choosen_date2_string
 
         forbiden_words_for_question = ['email address', 'mobile phone number', 'adresse e-mail', 'numéro de téléphone', 'your title:ingénieur', 'degree:', 'school:', 'location (city)', '.pdf', ' description:', 'your title:', 'of study:', 'teléfono móvil', 'company:', '@', 'employment:', 'letter:',"diploma:","last name","first name","description:"]
         forbiden_words_for_word = ["on","in","en","ne","de","se","x","#","|","-","_","&"]
@@ -684,7 +724,10 @@ class GenerateData():
                 
                 if weekday_name not in ["Saturday","Sunday"]:
                     self.all_date_of_application_good_format_excluding_weekend_day.append(self.convert_date_to_right_format(line[0].split(",")[0],True))
-
+                    self.all_date_of_application_good_format_excluding_weekend_day2.append(self.convert_date_to_right_format(line[0].split(",")[0],True))
+                    
+                if weekday_name in ["Saturday","Sunday"]:
+                    self.number_of_application_on_weekend+=1
                 for word in line[4].replace("-"," ").replace("–"," ").replace("/"," ").replace(","," ").replace("("," ").replace(")"," ").split(" "):
                     if len(word) > 0 and word.lower() not in forbiden_words_for_word and word.isdigit() is False:
                         self.list_of_word.append(word.lower())
@@ -738,16 +781,19 @@ class GenerateData():
         self.data_dict["last_application_date"] = self.last_date_of_application
         self.all_date_of_application_good_format = list(set(self.all_date_of_application_good_format))
         self.all_date_of_application_good_format.sort(key=lambda date: datetime.strptime(date, '%Y-%m-%d'))
-        self.compute_day_streak(self.all_date_of_application_good_format)
+        #self.compute_day_streak(self.all_date_of_application_good_format)
         self.all_date_of_application_good_format_excluding_weekend_day = list(set(self.all_date_of_application_good_format_excluding_weekend_day))
         self.all_date_of_application_good_format_excluding_weekend_day.sort(key=lambda date: datetime.strptime(date, '%Y-%m-%d'))
-        self.compute_day_streak(self.all_date_of_application_good_format_excluding_weekend_day,True)
+        #self.compute_day_streak(self.all_date_of_application_good_format_excluding_weekend_day,True)
         self.data_dict["application_day_streak_occurence"] = self.compute_day_streak(self.all_date_of_application_good_format)[1]
         self.data_dict["application_day_streak_value"] = self.compute_day_streak(self.all_date_of_application_good_format)[0]
-        self.data_dict["application_day_streak_excluding_weekend_occurence"] = self.compute_day_streak(self.all_date_of_application_good_format,True)[1]
-        self.data_dict["application_day_streak_excluding_weekend_value"] = self.compute_day_streak(self.all_date_of_application_good_format,True)[0]
+        
+        self.data_dict["application_day_streak_excluding_weekend_occurence"] = self.compute_day_streak(self.all_date_of_application_good_format_excluding_weekend_day,True)[1]
+        self.data_dict["application_day_streak_excluding_weekend_value"] = self.compute_day_streak(self.all_date_of_application_good_format_excluding_weekend_day,True)[0]
+        
         self.data_dict["non_application_day_streak_occurence"] = self.compute_non_day_streak(self.all_date_of_application_good_format)[1]
         self.data_dict["non_application_day_streak_value"] = self.compute_non_day_streak(self.all_date_of_application_good_format)[0]
+        
         self.data_dict["non_application_day_streak_excluding_weekend_occurence"] = self.compute_non_day_streak(self.all_date_of_application_good_format,True)[1]
         self.data_dict["non_application_day_streak_excluding_weekend_value"] = self.compute_non_day_streak(self.all_date_of_application_good_format,True)[0]
         
@@ -867,6 +913,8 @@ class GenerateData():
                         
             a = self.sort_list_per_occurence(self.list_of_application_per_month_distinct,list(set(self.list_of_application_per_month_distinct)),False,True)[0]
             b = self.sort_list_per_occurence(self.list_of_application_per_month_distinct,list(set(self.list_of_application_per_month_distinct)),False,True)[1]
+            b2 = self.sort_list_per_occurence(self.list_of_application_per_month_distinct,list(set(self.list_of_application_per_month_distinct)),True,True)[1]
+            
             c = self.sort_list_per_occurence(self.list_of_application_per_month_distinct,list(set(self.list_of_application_per_month_distinct)),True,True)[1]
             
 
@@ -882,10 +930,11 @@ class GenerateData():
                 if month[0] == "0":
                     month=month[1]
                 list_of_month.append(f"{self.number_to_month[int(month)]} {data[0]}")
+            
+            
             self.data_dict["number_of_application_per_distinct_month_value"] = list_of_month
             self.data_dict["number_of_application_per_distinct_month_occurence"] = self.sort_list_by_date(b,a,False,True)[1]
-            self.data_dict["number_of_application_per_distinct_month_rate"] = self.sort_list_by_date(b,a,False,True)[1]
-            
+            self.data_dict["number_of_application_per_distinct_month_rate"] = self.sort_list_by_date(b2,a,True,True)[1]
             
 
 
@@ -954,29 +1003,35 @@ class GenerateData():
             choosen_date2_string = f"{str(self.last_date_of_application).split("-")[2]}-{str(self.last_date_of_application).split("-")[1]}-{str(self.last_date_of_application).split("-")[0]}"
             
             day_difference = self.number_of_day_between_two_date(choosen_date2_string,choosen_date1_string)
+            print("caca1 " , day_difference)
         else:
             day_difference = self.number_of_day_between_two_date(choosen_date2_string,choosen_date1_string)
+            print("caca2 " , day_difference , choosen_date2_string , choosen_date1_string)
+
         if len(list(set(self.all_date_of_application))) > day_difference:
             day_difference = len(list(set(self.all_date_of_application)))
-        
+            print("caca3 " , day_difference)
 
 
         #a , b = self.sort_list_by_date(self.data_dict["all_day_application_occurence"],self.data_dict["all_day_application_occurence_rate_value"])
-        a , b = [] , []
+        a , b , c = [] , [] , []
 
-        for i in range(day_difference+2):
-            next_day = str(choosen_date1 + dtt.timedelta(days=(i - 1))).split(" ")[0]
+        for i in range(day_difference+1):
+            next_day = str(choosen_date1 + dtt.timedelta(days=(i))).split(" ")[0]
             if next_day not in self.data_dict["all_day_application_occurence_rate_value"]:
                 a.append(next_day)
                 b.append(0)
+                c.append(0)
             else:
                 a.append(next_day)
                 b.append(self.data_dict["all_day_application_occurence"][self.data_dict["all_day_application_occurence_rate_value"].index(str(next_day))])
+                c.append(100)
         #streak_start = str(datetime(split_date[0], split_date[1], split_date[2]) - dtt.timedelta(days=(index - 1))).split(" ")[0]
 
         self.data_dict["all_day_application_occurence_rate_value_sorted"] = a
+        self.data_dict["all_day_application_occurence_rate_value_sorted2"] = a
         self.data_dict["all_day_application_occurence_sorted"] = b
-        
+        self.data_dict["all_day_application_occurence_sorted2"] = c
         self.data_dict["number_of_application_ratio_per_day"] = round(int(self.data_dict["number_of_application"])/day_difference,1)
         if self.data_dict["number_of_application_ratio_per_day"] == 0.0:
             self.data_dict["number_of_application_ratio_per_day"] = round(int(self.data_dict["number_of_application"])/day_difference,5)
@@ -1020,13 +1075,28 @@ class GenerateData():
         weekday_day_nb = self.get_number_of_weekend_day_between_two_dates(choosen_date1_string,choosen_date2_string,choosen_date1)
 
 
+    
+        
+        self.data_dict["number_of_application_on_weekend"] = self.number_of_application_on_weekend
+        self.data_dict["number_of_non_application_on_weekend"] = weekday_day_nb - self.number_of_application_on_weekend
+        
+        #all_date_of_application_good_format_excluding_weekend_day
+
+        #print(len(self.all_date_of_application_good_format_excluding_weekend_day) ,number_of_apply )
+        self.data_dict["rate_of_application_on_non_weekend_day"] = round((len(self.all_date_of_application_good_format_excluding_weekend_day2) / number_of_apply) * 100 , 1)
+        self.data_dict["rate_of_application_on_weekend_day"] = round((self.number_of_application_on_weekend / number_of_apply) * 100 , 5)
+        
+        self.data_dict["rate_of_application_based_only_on_weekend_day"] = round((self.number_of_application_on_weekend / weekday_day_nb) * 100 , 3)
+        self.data_dict["rate_of_non_application_based_only_on_weekend_day"] = round(100 - self.data_dict["rate_of_application_based_only_on_weekend_day"],3)
+        
         
         #print(day_difference - weekday_day_nb , day_difference , weekday_day_nb)
         self.data_dict["number_of_day_you_applied_excluding_weekend"] = len(list(set(self.all_date_of_application_good_format_excluding_weekend_day)))
         self.data_dict["number_of_day_you_applied_excluding_weekend_rate"] = round(len(list(set(self.all_date_of_application_good_format_excluding_weekend_day)))/(day_difference - weekday_day_nb) , 1) * 100
         self.data_dict["number_of_day_you_didnt_apply_excluding_weekend"] = day_difference - len(list(set(self.all_date_of_application_good_format_excluding_weekend_day))) - weekday_day_nb
         self.data_dict["number_of_day_you_didnt_apply_excluding_weekend_rate"] = round((day_difference - len(list(set(self.all_date_of_application_good_format_excluding_weekend_day))) - weekday_day_nb)/(day_difference - weekday_day_nb) , 1) * 100
-        
+        self.data_dict["weekday_day_nb"] = weekday_day_nb
+
         if self.number_of_application_on_even_day > 0 and self.number_of_application_on_odd_day > 0:
             self.data_dict["number_of_postualation_on_even_day"] = self.number_of_application_on_even_day
             self.data_dict["number_of_postualation_on_even_ratio"] = round(self.number_of_application_on_even_day / len(self.list_of_company) , 2)

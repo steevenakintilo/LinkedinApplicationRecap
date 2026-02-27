@@ -95,28 +95,81 @@ const DetailedStat = () => {
         
         <input name="myInput" placeholder="Cherche ton élement" onChange={handle_text_input}/>
         <br></br>
+        
+        {(() => {
+          if (retrieved_data[2] > -999) {
+            return (
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Element</TableCell>
+                      <TableCell>Nombre de fois qu'il est présent</TableCell>
+                      <TableCell>Son %</TableCell>
+                    </TableRow>
+                  </TableHead>
 
-        <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Element</TableCell>
-              <TableCell>Nombre de fois qu'il est présent</TableCell>
-              <TableCell>Son %</TableCell>
-            </TableRow>
-          </TableHead>
+                  <TableBody>
+                    {data_dict.map((data_dict:any) => (
+                      <TableRow key={data_dict.data}>
+                        <TableCell>{data_dict.data}</TableCell>
+                        <TableCell>{data_dict.number}/{retrieved_data[4]}</TableCell>
+                        <TableCell>{data_dict.rate}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )
+          } else if (retrieved_data[4] === 999999) {
+            return (
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Element</TableCell>
+                      <TableCell>Nombre de jour ou tu as postulé</TableCell>
+                    </TableRow>
+                  </TableHead>
 
-          <TableBody>
-            {data_dict.map((data_dict:any) => (
-              <TableRow key={data_dict.data}>
-                <TableCell>{data_dict.data}</TableCell>
-                <TableCell>{data_dict.number}/{retrieved_data[4]}</TableCell>
-                <TableCell>{data_dict.rate}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                  <TableBody>
+                    {data_dict.map((data_dict:any) => (
+                      <TableRow key={data_dict.data}>
+                        <TableCell>{data_dict.data}</TableCell>
+                        <TableCell>{data_dict.number}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )
+
+          } 
+          
+          else {
+            return (
+              <TableContainer component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Element</TableCell>
+                      <TableCell>Nombre de jour consécutif</TableCell>
+                    </TableRow>
+                  </TableHead>
+
+                  <TableBody>
+                    {data_dict.map((data_dict:any) => (
+                      <TableRow key={data_dict.data}>
+                        <TableCell>{data_dict.data}</TableCell>
+                        <TableCell>{data_dict.number}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )
+          }
+        })()}
       </div>
     );
   }
