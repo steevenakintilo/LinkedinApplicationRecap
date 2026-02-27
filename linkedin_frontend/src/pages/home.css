@@ -19,10 +19,15 @@
     position: 'absolute';
     display: flex;
     justify-content: flex-end;
+    font-size: 100px
 }
 
 .positionInBottom2 {
     position: 'absolute';
     display: flex;
     justify-content: flex-end;
+    font-size: 100px
+}
+.big_button {
+    font-size: 100px
 }

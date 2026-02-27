@@ -18,9 +18,9 @@ const HomePage = () => {
   
   // linkedin_data
   function send_date_and_retrieve_data () {
-    const blob2 = [min_date_choosen,max_date_choosen];
     
-    console.log(blob2);
+    let blob2 = [min_date_choosen,max_date_choosen];
+    
     fetch("http://127.0.0.1:8000/GenerateData", {
         method: 'POST',
         headers: {"Content-Type" : "application/json"},
@@ -89,7 +89,7 @@ const HomePage = () => {
         
         <br></br>
 
-        <h1 className="nice_font">Si tu veux les statistiques depuis ta premiére candidature ne choisit aucune date</h1>
+        <h1 className="nice_font">Si tu veux les statistiques depuis ta premiére candidature choisit aucune date</h1>
 
         <br></br>
         

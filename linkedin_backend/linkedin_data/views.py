@@ -23,14 +23,14 @@ def retrieve_json_and_get_data(request):
             
             dataRecieved = request.body
             dataRecieved = json.loads(dataRecieved.decode()) 
-            #dict_obj = pickle.loads(dataRecieved)
-            #print(type(dataRecieved[0]))
-            print(dataRecieved[0],dataRecieved[1])
+            min_date , max_date = linkedin_data.min_and_max_date_of_applicaton()
             
-            # if len(dataRecieved[0]) < 2:
-            #     dataRecieved = ["2025-09-27" , "2026-02-19"]
             
-            jsonData = linkedin_data.main_function(dataRecieved[0],dataRecieved[1])            
+            if len(dataRecieved[0]) == 0 or len(dataRecieved[1]) == 0:
+                jsonData = linkedin_data.main_function(f"{min_date.split("-")[2]}-{min_date.split("-")[1]}-{min_date.split("-")[0]}",
+                                                f"{max_date.split("-")[2]}-{max_date.split("-")[1]}-{max_date.split("-")[0]}")            
+            else:
+                jsonData = linkedin_data.main_function(dataRecieved[0],dataRecieved[1])            
             
             json_str = json.dumps(jsonData, indent=4,ensure_ascii=False)
 
