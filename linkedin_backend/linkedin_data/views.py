@@ -23,10 +23,10 @@ def retrieve_json_and_get_data(request):
             
             dataRecieved = request.body
             dataRecieved = json.loads(dataRecieved.decode()) 
-            min_date , max_date = linkedin_data.min_and_max_date_of_applicaton()
             
             
             if len(dataRecieved[0]) == 0 or len(dataRecieved[1]) == 0:
+                min_date , max_date = linkedin_data.min_and_max_date_of_applicaton()
                 jsonData = linkedin_data.main_function(f"{min_date.split("-")[2]}-{min_date.split("-")[1]}-{min_date.split("-")[0]}",
                                                 f"{max_date.split("-")[2]}-{max_date.split("-")[1]}-{max_date.split("-")[0]}")            
             else:

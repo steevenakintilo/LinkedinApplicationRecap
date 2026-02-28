@@ -743,7 +743,7 @@ class GenerateData():
 
         for line in self.filedata:            
             self.all_date_of_application.append(line[0].split(",")[0])
-
+        
         self.lowest_date_of_application = self.get_the_lowest_date_of_a_list()
         self.last_date_of_application = self.get_the_lowest_date_of_a_list(True)
         return self.lowest_date_of_application , self.last_date_of_application
@@ -1014,8 +1014,10 @@ class GenerateData():
 
         
         self.data_dict["number_of_question_in_average_per_application"] = round(sum(self.number_of_question_per_application2)/number_of_apply)
-        self.data_dict["number_of_question_in_average_per_application_withouth_0"] = round(sum(self.number_of_question_per_application)/(number_of_apply - self.number_of_application_withouth_question))
-
+        try:
+            self.data_dict["number_of_question_in_average_per_application_withouth_0"] = round(sum(self.number_of_question_per_application)/(number_of_apply - self.number_of_application_withouth_question))
+        except:
+            self.data_dict["number_of_question_in_average_per_application_withouth_0"] = 0
         
         #print((round(sum(self.number_of_question_per_application2)/len(self.number_of_question_per_application2)) , 2) * 100)
         
@@ -1024,37 +1026,40 @@ class GenerateData():
         b = self.sort_list_per_occurence(self.number_of_question_per_application,list(set(self.number_of_question_per_application)),False,True)[1]
         paired = list(zip(b,a))
 
-        paired.sort(key=lambda x: x[1])
-        b , a = zip(*paired)
-        a = list(a)
-        b = list(b)
-        c , d = [] , []            
+        try:
+            paired.sort(key=lambda x: x[1])
+            b , a = zip(*paired)
+            a = list(a)
+            b = list(b)
+            c , d = [] , []            
 
 
-        for i in range(0,a[-1] + 1):
-            if i not in a and i != 0:
-                c.append(i)
-                d.append(0)
-            elif i == 0:
-                c.append(0)
-                d.append(self.number_of_application_withouth_question)
-            else:
-                c.append(i)
-                d.append(b[a.index(i)])
+            for i in range(0,a[-1] + 1):
+                if i not in a and i != 0:
+                    c.append(i)
+                    d.append(0)
+                elif i == 0:
+                    c.append(0)
+                    d.append(self.number_of_application_withouth_question)
+                else:
+                    c.append(i)
+                    d.append(b[a.index(i)])
 
-        
-        self.data_dict["number_of_question_per_application_value_sorted"] = c
-        self.data_dict["number_of_question_per_application_occurence_sorted"] = d
-        self.data_dict["number_of_question"] = len(self.list_of_question_withouth_anser)
-        self.data_dict["number_of_different_question"] = len(list(set(self.list_of_question_withouth_anser)))
-        
+            
+            self.data_dict["number_of_question_per_application_value_sorted"] = c
+            self.data_dict["number_of_question_per_application_occurence_sorted"] = d
+            self.data_dict["number_of_question"] = len(self.list_of_question_withouth_anser)
+            self.data_dict["number_of_different_question"] = len(list(set(self.list_of_question_withouth_anser)))
+            
 
-        self.data_dict["number_of_application_with_question"] = self.number_of_application_with_question
-        self.data_dict["number_of_application_withouth_question"] = self.number_of_application_withouth_question
-        
-        self.data_dict["number_of_application_withouth_question_ratio"] = round(self.number_of_application_withouth_question/len(self.list_of_company) , 2) * 100
-        self.data_dict["number_of_application_with_question_ratio"] = round(self.number_of_application_with_question/len(self.list_of_company) , 2) * 100
-        
+            self.data_dict["number_of_application_with_question"] = self.number_of_application_with_question
+            self.data_dict["number_of_application_withouth_question"] = self.number_of_application_withouth_question
+            
+            self.data_dict["number_of_application_withouth_question_ratio"] = round(self.number_of_application_withouth_question/len(self.list_of_company) , 2) * 100
+            self.data_dict["number_of_application_with_question_ratio"] = round(self.number_of_application_with_question/len(self.list_of_company) , 2) * 100
+        except:
+            pass
+
 
         if len(list(set(self.list_of_application_per_month))) > 1:    
             a = self.sort_list_per_occurence(self.list_of_application_per_month,list(set(self.list_of_application_per_month)),False,True)[0]
@@ -1173,10 +1178,13 @@ class GenerateData():
             day_difference = self.number_of_day_between_two_date(choosen_date2_string,choosen_date1_string)
             print("caca1 " , day_difference)
         else:
+            print("iciiii " , choosen_date2_string,choosen_date1_string)
             day_difference = self.number_of_day_between_two_date(choosen_date2_string,choosen_date1_string)
-            print("caca2 " , day_difference , choosen_date2_string , choosen_date1_string)
+            #print("caca2 " , day_difference , choosen_date2_string , choosen_date1_string)
 
         if len(list(set(self.all_date_of_application))) > day_difference:
+            print(day_difference)
+            print(list(set(self.all_date_of_application)) ,"icooooo")
             day_difference = len(list(set(self.all_date_of_application)))
             print("caca3 " , day_difference)
 
@@ -1254,9 +1262,9 @@ class GenerateData():
 
         self.data_dict["number_of_application_ratio"] = self.application_rate_dict
         self.data_dict["number_of_day_you_applied"] = len(list(set(self.all_date_of_application)))
-        self.data_dict["number_of_day_you_applied_rate"] = round(len(list(set(self.all_date_of_application)))/day_difference , 1) * 100
+        self.data_dict["number_of_day_you_applied_rate"] = round(len(list(set(self.all_date_of_application)))/day_difference , 3) * 100
         self.data_dict["number_of_day_you_applied_you_didnt_apply"] = day_difference - len(list(set(self.all_date_of_application)))
-        self.data_dict["number_of_day_you_applied_you_didnt_apply_rate"] = round((day_difference - len(list(set(self.all_date_of_application))))/day_difference , 1) * 100
+        self.data_dict["number_of_day_you_applied_you_didnt_apply_rate"] = round((day_difference - len(list(set(self.all_date_of_application))))/day_difference , 3) * 100
         
         #print(len(list(set(self.list_of_application_per_day_name2))) , day_difference)
         # self.write_into_json_file("data.json",self.data_dict)
@@ -1281,9 +1289,9 @@ class GenerateData():
         
         #print(day_difference - weekday_day_nb , day_difference , weekday_day_nb)
         self.data_dict["number_of_day_you_applied_excluding_weekend"] = len(list(set(self.all_date_of_application_good_format_excluding_weekend_day)))
-        self.data_dict["number_of_day_you_applied_excluding_weekend_rate"] = round(len(list(set(self.all_date_of_application_good_format_excluding_weekend_day)))/(day_difference - weekday_day_nb) , 1) * 100
+        self.data_dict["number_of_day_you_applied_excluding_weekend_rate"] = round(len(list(set(self.all_date_of_application_good_format_excluding_weekend_day)))/(day_difference - weekday_day_nb) , 3) * 100
         self.data_dict["number_of_day_you_didnt_apply_excluding_weekend"] = day_difference - len(list(set(self.all_date_of_application_good_format_excluding_weekend_day))) - weekday_day_nb
-        self.data_dict["number_of_day_you_didnt_apply_excluding_weekend_rate"] = round((day_difference - len(list(set(self.all_date_of_application_good_format_excluding_weekend_day))) - weekday_day_nb)/(day_difference - weekday_day_nb) , 1) * 100
+        self.data_dict["number_of_day_you_didnt_apply_excluding_weekend_rate"] = round((day_difference - len(list(set(self.all_date_of_application_good_format_excluding_weekend_day))) - weekday_day_nb)/(day_difference - weekday_day_nb) , 3) * 100
         self.data_dict["weekday_day_nb"] = weekday_day_nb
 
         if self.number_of_application_on_even_day > 0 and self.number_of_application_on_odd_day > 0:

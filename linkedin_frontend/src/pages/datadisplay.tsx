@@ -524,7 +524,7 @@ const DataDisplay = () => {
         
 
         {(() => {
-          if (retrieved_data.number_of_application_per_day_name_value.length >= 2) {
+          if (retrieved_data.number_of_application_per_day_name_value.length >= 1) {
             return (
             <div>
               <AgCharts options={chart_number_of_application_per_day_name_value_sorted} />  
@@ -537,7 +537,7 @@ const DataDisplay = () => {
         <br></br>
         
         {(() => {
-          if (retrieved_data.number_of_application_per_day_name_value.length >= 2) {
+          if (retrieved_data.number_of_application_per_day_name_value.length >= 1) {
             return (
             <div>
               <AgCharts options={chart_number_of_application_per_day_name_value} />  
@@ -731,17 +731,18 @@ const DataDisplay = () => {
           }
         })()}
         
+        
         <div className="spacer"></div>        
         <h2>{big_line}</h2>
         {(() => {
-          if (retrieved_data.all_company.number_of_question <= 5) {
+          if (retrieved_data.number_of_question <= 5 && retrieved_data.number_of_question > 0) {
             return (
               <div>
                 <h1 className="nice_font">Tu as répondu à {retrieved_data.number_of_question} question(s) dont {retrieved_data.number_of_different_question} différente(s)</h1>
                 <AgCharts options={chart_all_question_sorted_value} />        
               </div>
             )
-          } else {
+          } else if (retrieved_data.number_of_question > 0) {
             return (
               <div>
                 <h1 className="nice_font">Tu as répondu à {retrieved_data.number_of_question} question(s) dont {retrieved_data.number_of_different_question} différente(s)</h1>
@@ -894,7 +895,7 @@ const DataDisplay = () => {
 
         <div className="spacer"></div>        
         <h2>{big_line}</h2>
-        
+
         {(() => {
           if (retrieved_data.number_of_day_between_first_and_last_application > 1 && retrieved_data.number_of_day_between_first_and_last_application < max_number_for_display) {
             return (
@@ -908,7 +909,7 @@ const DataDisplay = () => {
         <br></br>
         
         {(() => {
-          if (retrieved_data.number_of_day_between_first_and_last_application <= 10) {
+          if (retrieved_data.all_day_application_occurence_rate_value.length <= 10) {
             return (
               <div>
                 <AgCharts options={chart_dict_all_day_application_occurence_rate_value} />        
@@ -937,17 +938,24 @@ const DataDisplay = () => {
         
         
 
-        <div className="spacer"></div>        
-        <h2>{big_line}</h2>
-        
+        {(() => {
+          if (retrieved_data.number_of_application_per_year_value.length > 1) {
+            return (
+              <div>
+                <div className="spacer"></div>        
+                <h2>{big_line}</h2>
+              </div>
+            )
+        }})()}
+
          {(() => {
-          if (retrieved_data.application_day_streak_value.length <= 10) {
+          if (retrieved_data.application_day_streak_value.length <= 10 && retrieved_data.application_day_streak_value.length > 0) {
             return (
               <div>
                 <AgCharts options={chart_application_day_streak_value} />        
               </div>
             )
-          } else {
+          } else if (retrieved_data.application_day_streak_value.length > 0){
             return (
               <div>
                 <AgCharts options={chart_application_day_streak_value} />
@@ -972,13 +980,13 @@ const DataDisplay = () => {
         <br></br>
             
         {(() => {
-          if (retrieved_data.non_application_day_streak_value.length <= 10) {
+          if (retrieved_data.non_application_day_streak_value.length <= 10 &&  retrieved_data.non_application_day_streak_occurence.length > 0) {
             return (
               <div>
                 <AgCharts options={chart_non_application_day_streak_value} />        
               </div>
             )
-          } else {
+          } else if (retrieved_data.non_application_day_streak_occurence.length > 0) {
             return (
               <div>
                 <AgCharts options={chart_non_application_day_streak_value} />
@@ -1000,13 +1008,13 @@ const DataDisplay = () => {
         })()}
 
          {(() => {
-          if (retrieved_data.application_day_streak_excluding_weekend_value.length <= 10) {
+          if (retrieved_data.application_day_streak_excluding_weekend_value.length <= 10 && retrieved_data.application_day_streak_excluding_weekend_value.length > 0) {
             return (
               <div>
                 <AgCharts options={chart_application_day_streak_excluding_weekend_value} />        
               </div>
             )
-          } else {
+          } else if (retrieved_data.application_day_streak_excluding_weekend_value.length > 0) {
             return (
               <div>
                 <AgCharts options={chart_application_day_streak_excluding_weekend_value} />
@@ -1031,13 +1039,13 @@ const DataDisplay = () => {
         <br></br>
         
         {(() => {
-          if (retrieved_data.non_application_day_streak_excluding_weekend_value.length <= 10) {
+          if (retrieved_data.non_application_day_streak_excluding_weekend_value.length <= 10 && retrieved_data.non_application_day_streak_excluding_weekend_value.length > 0) {
             return (
               <div>
                 <AgCharts options={chart_non_application_day_streak_excluding_weekend_value} />        
               </div>
             )
-          } else {
+          } else if (retrieved_data.non_application_day_streak_excluding_weekend_value.length > 0) {
             return (
               <div>
                 <AgCharts options={chart_non_application_day_streak_excluding_weekend_value} />
@@ -1058,8 +1066,17 @@ const DataDisplay = () => {
           }
         })()}
         
-        <div className="spacer"></div>        
-        <h2>{big_line}</h2>
+
+        {(() => {
+          if (retrieved_data.number_of_application_per_year_value.length > 1) {
+            return (
+              <div>
+                <div className="spacer"></div>        
+                <h2>{big_line}</h2>
+              </div>
+            )
+        }})()}
+
         {(() => {
           if (retrieved_data.number_of_application_per_year_value.length > 1) {
             return (
@@ -1081,12 +1098,12 @@ const DataDisplay = () => {
             )
         }})()}
         
-        <div className="spacer"></div>        
         
         {(() => {
           if (retrieved_data.number_of_application_per_year_value.length > 1) {
             return (
               <div>
+                <div className="spacer"></div>        
                 <h2>{big_line}</h2>
               </div>
             )
