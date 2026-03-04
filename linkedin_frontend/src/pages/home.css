@@ -18,11 +18,14 @@
   width: 100%;
 }
 
-
+.nobr {
+  white-space: nowrap;
+}
 
 .nice_font {
     font-family: "Inter";
     font-weight: normal;
+    text-align: center;
 }
 
 .spacer {
@@ -50,40 +53,14 @@
   font-family: "Twemoji Country Flags", "Helvetica", "Comic Sans", serif;
 }
 
-#total {
-  border-radius: 10px;
-  background-color: lightgrey;
-  top: 50%;
-  left: 50%;
-  justify-content: center;
-  align-items: center;
-  width: 1000px;
-  height: 500px;
-  border: 15px solid rgb(0, 0, 0);
-  padding: 50px;
-  margin: 10%;
-  word-wrap: break-word;
-  overflow-y:auto;
 
+.date_input {
+  margin-left: 450px;
+  text-align: center;
+  margin-right: 450px;
+  font-size: 1.8rem
 }
 
-.coco {
-  display: flex;
-  justify-content: center;
-  align-Items: center;
-  height: '100vh';
-}
-
-
-#tot5al {
-  border-radius: 10px;
-  background-color: lightgrey;
-  width: 1000px;
-  height: 500px;
-  border: 15px solid rgb(0, 0, 0);
-  padding: 50px;
-  margin: 20px;
-  word-wrap: break-word;
-  overflow-y:auto;
-
+.big_date_input {
+  font-size: 1.8rem
 }

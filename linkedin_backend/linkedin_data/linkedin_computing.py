@@ -33,6 +33,10 @@ class GenerateData():
         self.last_date_of_application : str = ""
         self.list_of_application_per_day_name2 : list[str] = []
         self.list_of_application_per_day_name : list[str] = []
+
+        self.list_of_application_per_day_name2_english : list[str] = []
+        self.list_of_application_per_day_name_english : list[str] = []
+        
         self.list_of_application_per_year: list[str] = []
         self.list_of_application_per_month: list[str] = []
         self.list_of_application_per_month_distinct: list[str] = []
@@ -69,6 +73,23 @@ class GenerateData():
             12:"Décembre",
             
         }
+
+        self.number_to_month_english: dict[int:str] = {
+            1:"January",
+            2:"February",
+            3:"March",
+            4:"April",
+            5:"May",
+            6:"June",
+            7:"July",
+            8:"August",
+            9:"September",
+            10:"October",
+            11:"November",
+            12:"December",
+            
+        }
+        
         self.weekday_name_english_to_date : dict[str:str] = {
             "Monday":"2000-01-01",
             "Tuesday":"2001-01-01",
@@ -231,7 +252,7 @@ class GenerateData():
         }
 
 
-    def sort_list_by_date(self,list_of_element , list_of_date,change_back_to_weekday=False,month=False):
+    def sort_list_by_date(self,list_of_element , list_of_date,change_back_to_weekday=False,month=False,english=False):
         """A function that sort list by date"""
         paired = list(zip(list_of_date, list_of_element))
         
@@ -256,7 +277,10 @@ class GenerateData():
                     good_month = int(good_month)
                     list_of_date_.append(self.number_to_month[good_month])
                 else:
-                    list_of_date_.append(self.weekday_name_english_to_french[self.date_to_weekname[dt]])
+                    if english:
+                        list_of_date_.append(self.date_to_weekname[dt])
+                    else:
+                        list_of_date_.append(self.weekday_name_english_to_french[self.date_to_weekname[dt]])
             
             return list_of_date_ , list_of_element
         return list_of_date , list_of_element
@@ -725,6 +749,8 @@ class GenerateData():
             my_date = dtt.date(int(current_day.split("-")[0]),int(current_day.split("-")[1]),int(current_day.split("-")[2]))
             weekday_name = calendar.day_name[my_date.weekday()]
             self.list_of_application_per_day_name.append(self.weekday_name_english_to_french[weekday_name])
+            self.list_of_application_per_day_name_english.append(weekday_name)
+            
             if weekday_name in ["Saturday","Sunday"]:
                 weekday_day_nb+=1
             #streak_start = str(datetime(split_date[0], split_date[1], split_date[2]) - dtt.timedelta(days=(index - 1))).split(" ")[0]
@@ -856,6 +882,10 @@ class GenerateData():
                 weekday_name = calendar.day_name[my_date.weekday()]
                 self.list_of_application_per_day_name.append(self.weekday_name_english_to_french[weekday_name])
                 self.list_of_application_per_day_name2.append(self.weekday_name_english_to_date[weekday_name])
+                
+                self.list_of_application_per_day_name_english.append(weekday_name)
+                self.list_of_application_per_day_name2_english.append(weekday_name)
+                
                 self.list_of_application_per_year.append(int(self.all_date_of_application_good_format[-1].split("-")[0]))
                 self.list_of_application_per_month.append(int(self.all_date_of_application_good_format[-1].split("-")[1]))
                 self.list_of_application_per_month_distinct.append(f"{(self.all_date_of_application_good_format[-1].split("-")[0])}-{(self.all_date_of_application_good_format[-1].split("-")[1])}")
@@ -1075,10 +1105,13 @@ class GenerateData():
             c = list(c)
             
             list_of_month = []
-
+            list_of_month_english = []
             for number in a:
                 list_of_month.append(self.number_to_month[number])
+                list_of_month_english.append(self.number_to_month_english[number])
             self.data_dict["number_of_application_per_month_value"] = list_of_month
+            self.data_dict["number_of_application_per_month_value_english"] = list_of_month_english
+            
             self.data_dict["number_of_application_per_month_occurence"] = b
             self.data_dict["number_of_application_per_month_rate"] = c
 
@@ -1096,15 +1129,20 @@ class GenerateData():
  
 
             list_of_month = []
+            list_of_month_english = []
+            
             for data in self.sort_list_by_date(b,a,False,True)[0]:
                 data = data.split("-")
                 month = str(data[1])
                 if month[0] == "0":
                     month=month[1]
                 list_of_month.append(f"{self.number_to_month[int(month)]} {data[0]}")
-            
+                list_of_month_english.append(f"{self.number_to_month_english[int(month)]} {data[0]}")
+                
             
             self.data_dict["number_of_application_per_distinct_month_value"] = list_of_month
+            self.data_dict["number_of_application_per_distinct_month_value_english"] = list_of_month_english
+            
             self.data_dict["number_of_application_per_distinct_month_occurence"] = self.sort_list_by_date(b,a,False,True)[1]
             self.data_dict["number_of_application_per_distinct_month_rate"] = self.sort_list_by_date(b2,a,True,True)[1]
             
@@ -1136,6 +1174,9 @@ class GenerateData():
         
         self.data_dict["number_of_application_per_day_name_value_sorted"] = self.sort_list_by_date(b,a,True)[0]
         self.data_dict["number_of_application_per_day_name_occurence_sorted"] = self.sort_list_by_date(b,a,True)[1]
+                
+        self.data_dict["number_of_application_per_day_name_value_sorted_english"] = self.sort_list_by_date(b,a,True,False,True)[0]
+        self.data_dict["number_of_application_per_day_name_occurence_sorted_english"] = self.sort_list_by_date(b,a,True,False,True)[1]
         
         for elem , elem2 in zip(self.data_dict["number_of_application_per_hour_value"],self.data_dict["number_of_application_per_hour_occurence"]):
             if int(elem) not in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]:
@@ -1257,9 +1298,10 @@ class GenerateData():
 
         if hours_time is False:
             self.data_dict["number_of_application_sentence"] = f"Tu as postulé à {int(self.data_dict["number_of_application"])} offre(s) entre le {choosen_date1_string} et le {choosen_date2_string} en {day_difference} jour(s) ce qui fait une  moyenne de {self.application_rate_dict["days"]} candidatures par jour , {self.application_rate_dict["weeks"]} candidatures par semaines , {self.application_rate_dict["months"]} candidatures par mois , {self.application_rate_dict["years"]} candidatures par années , {self.application_rate_dict["decades"]} candidatures par décennies"
+            
         else:
             self.data_dict["number_of_application_sentence"] = f"Tu as postulé à {int(self.data_dict["number_of_application"])} offre(s) entre le {choosen_date1_string} et le {choosen_date2_string} en {day_difference} jour(s) ce qui fait une  moyenne de {self.application_rate_dict["hours"]} candidatures par heures , {self.application_rate_dict["days"]} candidatures par jour , {self.application_rate_dict["weeks"]} candidatures par semaines , {self.application_rate_dict["months"]} candidatures par mois , {self.application_rate_dict["years"]} candidatures par années , {self.application_rate_dict["decades"]} candidatures par décennies"
-
+            
         self.data_dict["number_of_application_ratio"] = self.application_rate_dict
         self.data_dict["number_of_day_you_applied"] = len(list(set(self.all_date_of_application)))
         self.data_dict["number_of_day_you_applied_rate"] = round(len(list(set(self.all_date_of_application)))/day_difference , 3) * 100
@@ -1333,19 +1375,24 @@ class GenerateData():
 
         a = []
         b = []
-
+        c = []
         for i in range(first_application_month - 1 , number_of_month + first_application_month - 1):
             if f"{self.number_to_month[(i%12) + 1]} {number_of_year_list[int(i/12)]}" in self.data_dict["number_of_application_per_distinct_month_value"]:
                 #print("good " , self.number_to_month[(i%12) + 1], number_of_year_list[int(i/12)])
                 a.append(f"{self.number_to_month[(i%12) + 1]} {number_of_year_list[int(i/12)]}")
+                c.append(f"{self.number_to_month_english[(i%12) + 1]} {number_of_year_list[int(i/12)]}")
+                
                 b.append(self.data_dict["number_of_application_per_distinct_month_occurence"][self.data_dict["number_of_application_per_distinct_month_value"].index(f"{self.number_to_month[(i%12) + 1]} {number_of_year_list[int(i/12)]}")])
             else:
                 #print("bad " , self.number_to_month[(i%12) + 1], number_of_year_list[int(i/12)])
                 a.append(f"{self.number_to_month[(i%12) + 1]} {number_of_year_list[int(i/12)]}")
+                c.append(f"{self.number_to_month_english[(i%12) + 1]} {number_of_year_list[int(i/12)]}")
                 b.append(0)
 
         self.data_dict["number_of_application_per_distinct_month_value_sorted"] = a
         self.data_dict["number_of_application_per_distinct_month_occurence_sorted"] = b
+        self.data_dict["number_of_application_per_distinct_month_value_sorted_english"] = c
+        
         
             
         # Heures

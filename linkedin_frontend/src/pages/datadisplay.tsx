@@ -1,13 +1,13 @@
 import './home.css'
 import React from 'react';
-import { data, useNavigate } from 'react-router-dom';
+import { data, useNavigate } from 'react-router';
 import { useState , useEffect } from 'react';
-import {useLocation} from 'react-router-dom';
+import {useLocation} from 'react-router';
 import { AllCommunityModule, ModuleRegistry } from 'ag-charts-community';
 
 
 //import { AgCharts } from 'ag-charts-react';
-import { AgChartsReact } from 'ag-charts-react';
+import { AgCharts } from 'ag-charts-react';
 
 
 import { blue } from '@mui/material/colors';

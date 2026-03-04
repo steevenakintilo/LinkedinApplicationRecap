@@ -15,9 +15,10 @@
     "@mui/material": "^7.3.8",
     "ag-charts-community": "^13.1.0",
     "ag-charts-react": "^13.1.0",
+    "bootstrap": "^5.3.8",
     "country-flag-emoji-polyfill": "^0.1.8",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "react-router": "^7.13.1",
     "react-toastify": "^11.0.5"
   },

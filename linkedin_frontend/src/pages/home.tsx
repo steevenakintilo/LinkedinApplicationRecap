@@ -1,8 +1,8 @@
 import './home.css'
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { useState , useEffect } from 'react';
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -40,36 +40,6 @@ const HomePage = () => {
   }
   // linkedin_data
 
-  function navbar() {
-    return (
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-          <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"></link>
-          <div class="container-fluid">
-            <a class="navbar-brand" href="#">LinkedinApplicationRecap</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-              <ul class="navbar-nav">
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Features</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Pricing</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </nav>
-    )
-  }
-  
   function send_date_and_retrieve_data () {
     
     let blob2 = [min_date_choosen,max_date_choosen];
@@ -145,27 +115,20 @@ const HomePage = () => {
     return (
       <div className="backgroundcolour">
         {/* {toto_nav()} */}
-        <Custom_navbar/>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"></link>
-        
-        <h1 className="nice_font">LinkedinApplicationRecap</h1>
-        
-        <h1 className="rectangle">
-          <h1>TOTOTO</h1>
-        </h1>
-        {add_space(1)}
-        
-        <h1 className="nice_font">Choisie 2 dates une date1 et une date2</h1> 
-        <h1 className="nice_font">elles doivent être différentes et la date1 doit etre inférieur à la date2</h1> 
+        {/* <Custom_navbar/> */}
+        {Custom_navbar()}
+        {add_space(3)}        
+        <h1 className="nice_font">Pour avoir les statistiques de tes candidatures choisis 2 dates différentes.</h1> 
+        <h1 className="nice_font">Le site va ensuite afficher les statistiques entres les 2 dates choisis</h1> 
         
         {add_space(1)}
 
         <h1 className="nice_font">Si tu veux les statistiques depuis ta premiére candidature choisit aucune date</h1>
 
-        {add_space(1)}
+        {add_space(5)}
 
-        <h1 className="nice_font">Date1 :</h1>
         <input 
+          className="date_input"
           type="date"
           name="start_date"
           value={min_date_choosen}
@@ -173,10 +136,9 @@ const HomePage = () => {
           max={max_date_to_choose_possible}
           onChange={handleDateChangeMin}
         />
-        <br></br>
-        
-        <h1 className="nice_font">Date2 :</h1>    
-        <input 
+
+        <input
+          className="big_date_input" 
           type="date"
           name="end_date"
           value={max_date_choosen}
@@ -187,20 +149,15 @@ const HomePage = () => {
 
         {add_space(3)}
 
-        <button className="flag_button">🇬🇧</button>
+        {/* <button className="flag_button">🇬🇧</button> */}
 
-        {add_space(3)}        
+        {add_space(5)}        
         
         
 
-        {/* <br></br>
-        <button type="button" class="btn btn-primary">Primary</button>
-        <br></br> */}
+        <button onClick={send_date_and_retrieve_data} type="button" class="btn btn-secondary btn-lg position-absolute top-50 start-50 translate-middle">Génère la data</button>
+         
         
-        
-        <button onClick={send_date_and_retrieve_data}>
-          Génère la data
-        </button>
         <ToastContainer />
       </div>
     );

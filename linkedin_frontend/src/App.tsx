@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter, Routes, Route,Switch, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route,Switch, Link } from 'react-router';
 
 import HomePage from './pages/home';
 import DataDisplay from './pages/datadisplay';
