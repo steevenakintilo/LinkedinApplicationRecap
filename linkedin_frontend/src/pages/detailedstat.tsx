@@ -15,6 +15,7 @@ import {
   Paper
 } from "@mui/material";
 
+
 // Enable all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
 

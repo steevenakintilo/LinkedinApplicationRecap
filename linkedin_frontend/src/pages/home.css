@@ -1,9 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Cascadia+Mono:ital,wght@0,200..700;1,200..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
+
+#hidethis { animation: css 0s 3s forwards; }
+
+@keyframes css  { to { visibility: hidden; } }
+
+.rectangle {
+  display: inline-block;
+  width: 500px;
+  height: 50px;
+  background: #b7b7b7a0;
+}
+
+
 .backgroundcolour {
   background-color: #f3f2ef0e;
   width: 100%;
 }
+
 
 
 .nice_font {
@@ -16,18 +30,60 @@
 }
 
 .positionInBottom {
-    position: 'absolute';
+    position: absolute;
     display: flex;
     justify-content: flex-end;
     font-size: 100px
 }
 
 .positionInBottom2 {
-    position: 'absolute';
+    position: absolute;
     display: flex;
     justify-content: flex-end;
     font-size: 100px
 }
 .big_button {
     font-size: 100px
+}
+
+.flag_button {
+  font-family: "Twemoji Country Flags", "Helvetica", "Comic Sans", serif;
+}
+
+#total {
+  border-radius: 10px;
+  background-color: lightgrey;
+  top: 50%;
+  left: 50%;
+  justify-content: center;
+  align-items: center;
+  width: 1000px;
+  height: 500px;
+  border: 15px solid rgb(0, 0, 0);
+  padding: 50px;
+  margin: 10%;
+  word-wrap: break-word;
+  overflow-y:auto;
+
+}
+
+.coco {
+  display: flex;
+  justify-content: center;
+  align-Items: center;
+  height: '100vh';
+}
+
+
+#tot5al {
+  border-radius: 10px;
+  background-color: lightgrey;
+  width: 1000px;
+  height: 500px;
+  border: 15px solid rgb(0, 0, 0);
+  padding: 50px;
+  margin: 20px;
+  word-wrap: break-word;
+  overflow-y:auto;
+
 }

@@ -4,8 +4,14 @@ import { data, useNavigate } from 'react-router-dom';
 import { useState , useEffect } from 'react';
 import {useLocation} from 'react-router-dom';
 import { AllCommunityModule, ModuleRegistry } from 'ag-charts-community';
-import { AgCharts } from 'ag-charts-react';
+
+
+//import { AgCharts } from 'ag-charts-react';
+import { AgChartsReact } from 'ag-charts-react';
+
+
 import { blue } from '@mui/material/colors';
+import { ToastContainer, toast } from 'react-toastify';
 
 // Enable all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -15,6 +21,25 @@ const DataDisplay = () => {
   const location = useLocation();
   const retrieved_data = location.state;
   const big_line = "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
+  
+  useEffect(() => {
+      generete_popup("La data a bien été generé");
+    }, []);
+
+  function generete_popup(text:string) {
+    const notify = () => toast.success(text, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+    });;
+    notify()
+  }
+  
   console.log(retrieved_data)
   
   function generate_list_of_dict(list_:any,list2_:any,big_index:number) {
@@ -501,9 +526,12 @@ const DataDisplay = () => {
 
     return (
       <div>
-        <button className="positionInBottom2" onClick={go_home}>
-          🏠
-        </button>
+        <ToastContainer />
+        <header>
+          <button className="positionInBottom2" onClick={go_home}>
+            🏠
+          </button>
+        </header>
         <h1 className="nice_font">Voici les statistiques de tes candidatures:</h1>
         
         <div className="spacer"></div>        
