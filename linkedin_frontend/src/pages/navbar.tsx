@@ -14,9 +14,9 @@ const Custom_navbar = (type:number = 0 , variable:string = "") => {
     
     if (type === 0 ) {
         return (
-        <nav className="navbar navbar-expand-lg bg-body-tertiary">
+        <nav className="navbar navbar-expand-lg  navbarBGcolor fixed-top navbar_color">
         <div className="container-fluid">
-            <a className="navbar-brand" href="">LinkedinApplicationRecap</a>
+            <a className="navbar-brand" href="/">LinkedinApplicationRecap</a>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
             </button>

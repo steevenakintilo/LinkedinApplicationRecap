@@ -2,11 +2,9 @@ import './home.css'
 
 import { useNavigate } from 'react-router';
 import { useState , useEffect } from 'react';
-import { Link } from "react-router";
 import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 
 import { ToastContainer, toast } from 'react-toastify';
-import toto_nav from "./navbar.tsx"
 import Custom_navbar from "./navbar.tsx"
 
 polyfillCountryFlagEmojis();
