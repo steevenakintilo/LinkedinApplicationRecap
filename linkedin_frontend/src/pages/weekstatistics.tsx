@@ -1,10 +1,5 @@
 import './home.css'
 
-import { useNavigate } from 'react-router';
-import { useState , useEffect } from 'react';
-import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
-
-import { ToastContainer, toast } from 'react-toastify';
 import Custom_navbar from "./navbar.tsx"
 import {make_navbar_element,make_a_graphic,generate_list_of_dict,add_space,generate_list_of_dict2,make_a_graphic3,make_a_graphic2} from "../utility_function/utility_function.tsx"
 import { AgCharts } from 'ag-charts-react';

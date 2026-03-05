@@ -73,10 +73,7 @@ const DataDisplay = () => {
   const dict_number_of_time_you_applied_to_a_job_name_value = generate_list_of_dict(retrieved_data.number_of_time_you_applied_to_a_job_name_value,retrieved_data.number_of_time_you_applied_to_a_job_name_occurence,5)
   const dict_all_word_sorted_value = generate_list_of_dict(retrieved_data.all_word_sorted_value,retrieved_data.all_word_occurence,10)
   const dict_all_word_occurence_to_job_name_value = generate_list_of_dict(retrieved_data.all_word_occurence_to_job_name_value,retrieved_data.all_word_occurence_to_job_name_occurence,10)
-  const dict_all_question_sorted_value = generate_list_of_dict(retrieved_data.all_question_sorted_value,retrieved_data.all_question_occurence,5)
-  const dict_number_of_question_per_application_value_sorted = generate_list_of_dict(retrieved_data.number_of_question_per_application_value_sorted,retrieved_data.number_of_question_per_application_occurence_sorted,100)
-  const dict_number_of_question_per_application_value = generate_list_of_dict(retrieved_data.number_of_question_per_application_value,retrieved_data.number_of_question_per_application_ratio,100)
-  const dict_number_of_question_per_application_value2 = generate_list_of_dict(retrieved_data.number_of_question_per_application_value2,retrieved_data.number_of_question_per_application_ratio2,100)
+  
   
   
   
@@ -84,14 +81,6 @@ const DataDisplay = () => {
   const chart_number_of_time_you_applied_to_a_job_name_value = make_a_graphic("bar" , dict_number_of_time_you_applied_to_a_job_name_value,"Nombre de candidatures par poste")
   const chart_all_word_sorted_value = make_a_graphic("bar" , dict_all_word_sorted_value,"Les mots les plus présents parmis la liste de tout les mots")
   const chart_all_word_occurence_to_job_name_value = make_a_graphic("bar" , dict_all_word_occurence_to_job_name_value,"Les mots les plus présents dans le titre des annonces")
-  const chart_all_question_sorted_value = make_a_graphic("bar" , dict_all_question_sorted_value,"Les questions les plus demandées")
-  const chart_number_of_question_per_application_value_sorted = make_a_graphic("line" , dict_number_of_question_per_application_value_sorted,"Nombre de questions par offres")
-  const chart_number_of_question_per_application_value = make_a_graphic("bar" , dict_number_of_question_per_application_value,"Pourcentage de questions par offres qui ont au moins 1 question")
-  const chart_number_of_question_per_application_value2 = make_a_graphic("bar" , dict_number_of_question_per_application_value2,"Pourcentage de questions par offres")
-  
-  
-  const chart_number_of_application_with_question_ratio = make_a_graphic2("pie" , retrieved_data.number_of_application_with_question_ratio ,"Pourcentage de candidatures avec question",retrieved_data.number_of_application_withouth_question_ratio ,"Pourcentage de candidatures sans question","Pourcentage de candidature avec et sans questions")
-  
   
   let navbar_data_display = make_navbar_element(retrieved_data,true)
   
@@ -275,116 +264,6 @@ const DataDisplay = () => {
             )
           }
         })()}
-        
-        
-        <div className="spacer"></div>        
-        <h2>{big_line}</h2>
-        {(() => {
-          if (retrieved_data.number_of_question <= 5 && retrieved_data.number_of_question > 0) {
-            return (
-              <div>
-                <h1 className="nice_font">Tu as répondu à {retrieved_data.number_of_question} question(s) dont {retrieved_data.number_of_different_question} différente(s)</h1>
-                <AgCharts options={chart_all_question_sorted_value} />        
-              </div>
-            )
-          } else if (retrieved_data.number_of_question > 0) {
-            return (
-              <div>
-                <h1 className="nice_font">Tu as répondu à {retrieved_data.number_of_question} question(s) dont {retrieved_data.number_of_different_question} différente(s)</h1>
-                <AgCharts options={chart_all_question_sorted_value} />
-                <button
-                  onClick={() =>
-                    go_to_detailed_stat_page(
-                      retrieved_data.all_question_sorted_value,
-                      retrieved_data.all_question_occurence,
-                      retrieved_data.all_question_occurence_ratio,
-                      retrieved_data.number_of_question
-                    )
-                  }
-                >
-                  Toutes les statistiques 📊
-                </button>
-                      
-              </div>
-            )
-          }
-        })()}
-
-        <br></br>
-        <br></br>
-
-        <h1 className="nice_font">Il y a {retrieved_data.number_of_application_with_question} candidatures avec au moins 1 question et {retrieved_data.number_of_application_withouth_question} sans question</h1>
-        <h1 className="nice_font">Tu dois répondres en moyenne à {retrieved_data.number_of_question_in_average_per_application} questions par candidatures</h1>
-        
-        {(() => {
-          if (retrieved_data.number_of_application_with_question >= 5) {
-            return (
-            <div>
-              <h1 className="nice_font">Quand une candidature a au moins 1 question tu dois répondres en moyenne à {retrieved_data.number_of_question_in_average_per_application_withouth_0} questions</h1>          
-            </div>
-            
-            )
-          }
-        })()}
-        
-        <br></br>
-        <br></br>
-
-        {(() => {
-          if (retrieved_data.number_of_application_with_question >= 5) {
-            return (
-            <div>
-              <AgCharts options={chart_number_of_application_with_question_ratio} />  
-              <br></br>
-              <br></br>
-                    
-            </div>
-            )
-          }
-        })()}
-        
-        {(() => {
-          if (retrieved_data.number_of_application_with_question >= 5) {
-            return (
-              <div>
-                <AgCharts options={chart_number_of_question_per_application_value_sorted} /> 
-                <br></br>
-                <br></br>
-                      
-              </div>      
-            )
-          }
-        })()}
-        
-        {(() => {
-          if (retrieved_data.number_of_application_with_question >= 5) {
-            return (
-            <div>
-              <AgCharts options={chart_number_of_question_per_application_value2} />  
-              <br></br>
-              <br></br>
-                    
-            </div>
-            
-            )
-          }
-        })()}
-        
-        {(() => {
-          if (retrieved_data.number_of_application_with_question >= 5) {
-            return (
-            <div>
-              <AgCharts options={chart_number_of_question_per_application_value} />    
-              <br></br>
-              <br></br>
-                  
-            </div>
-            
-            )
-          }
-        })()}
-        
-        
         
         <br></br>
         <br></br>

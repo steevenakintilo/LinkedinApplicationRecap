@@ -8,6 +8,7 @@ import DayStatistics from './pages/daystatistics';
 import WeekStatistics from './pages/weekstatistics';
 import MonthStatistics from './pages/monthstatistics';
 import YearStatistics from './pages/yearstatistics';
+import QuestionStatistics from './pages/questionstatistics';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
         <Route path="/week_statistics" element={<WeekStatistics />} />
         <Route path="month_statistics" element={<MonthStatistics />} />
         <Route path="year_statistics" element={<YearStatistics />} />
+        <Route path="question_statistics" element={<QuestionStatistics />} />
         <Route path="/back_statistics" element={<DataDisplay />} />
       </Routes>
     </BrowserRouter>
