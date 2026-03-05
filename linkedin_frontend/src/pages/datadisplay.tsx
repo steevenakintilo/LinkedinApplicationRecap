@@ -60,7 +60,7 @@ const DataDisplay = () => {
 
       list_.forEach((data, index) => {
         if (index < big_index && list2_[index] > 0) {
-          list_of_dict.push({ data_name: data, data_number: list2_[index] });
+          list_of_dict.push({ data_name:  new Date(data), data_number: list2_[index] });
         }
       });
 
@@ -106,8 +106,9 @@ const DataDisplay = () => {
       series_data = [{ type: 'line', xKey: 'data_name', yKey: 'data_number', fill:generate_random_colour()}]
     } else if (type === "donut") {
       series_data = [{ type: 'donut', legendItemKey: 'data_name', angleKey: 'data_number', fill:generate_random_colour()}]
+    } else if (type === "area") {
+      series_data = [{ type: 'area', xKey: 'data_name', yKey: 'data_number', fill:generate_random_colour()}]
     }
-    
     const [graph_data, setChartOptions] = useState({
         // Data: Data to be displayed in the chart
         data: dict_data,
@@ -144,6 +145,23 @@ const DataDisplay = () => {
 
     return graph_data
   }
+
+  function make_a_graphic3(type:string,dict_data:string,graph_title:string) {
+    
+    let series_data: any = []
+    
+    series_data = [{ type: 'line', xKey: 'data_name', yKey: 'data_number', fill:generate_random_colour()}]
+    
+    const [graph_data, setChartOptions] = useState({
+        // Data: Data to be displayed in the chart
+        data: dict_data,
+        series: series_data,
+        title: { text: graph_title },
+    });
+
+    return graph_data
+  }
+
   
   const max_number_for_display = 450
   const dict_number_of_application_per_day_name_value_sorted = generate_list_of_dict(retrieved_data.number_of_application_per_day_name_value_sorted,retrieved_data.number_of_application_per_day_name_occurence_sorted,10)
@@ -163,7 +181,11 @@ const DataDisplay = () => {
   const dict_application_day_streak_excluding_weekend_value = generate_list_of_dict(retrieved_data.application_day_streak_excluding_weekend_value,retrieved_data.application_day_streak_excluding_weekend_occurence,10)
   const dict_non_application_day_streak_excluding_weekend_value = generate_list_of_dict(retrieved_data.non_application_day_streak_excluding_weekend_value,retrieved_data.non_application_day_streak_excluding_weekend_occurence,10)
   
-
+  const dict_number_of_application_over_time_date_split_in_20 = generate_list_of_dict2(retrieved_data.number_of_application_over_time_date_split_in_20,retrieved_data.number_of_application_over_time_split_in_20,200)
+  const dict_number_of_application_over_time_date_split_in_10 = generate_list_of_dict2(retrieved_data.number_of_application_over_time_date_split_in_10,retrieved_data.number_of_application_over_time_split_in_10,10)
+  const dict_number_of_application_over_time_date_split_in_5 = generate_list_of_dict2(retrieved_data.number_of_application_over_time_date_split_in_5,retrieved_data.number_of_application_over_time_split_in_5,10)
+  const dict_number_of_application_over_time_date_split_in_3 = generate_list_of_dict2(retrieved_data.number_of_application_over_time_date_split_in_3,retrieved_data.number_of_application_over_time_split_in_3,10)
+  
   const dict_all_day_application_occurence_rate_value_sorted = generate_list_of_dict(retrieved_data.all_day_application_occurence_rate_value_sorted,retrieved_data.all_day_application_occurence_sorted,9999999)
   const dict_all_day_application_occurence_rate_value_sorted2 = generate_list_of_dict2(retrieved_data.all_day_application_occurence_rate_value_sorted,retrieved_data.all_day_application_occurence_sorted2,9999999)
 
@@ -231,6 +253,12 @@ const DataDisplay = () => {
   const chart_number_of_week_you_applied_rate = make_a_graphic2("pie" , retrieved_data.number_of_week_you_applied ,"Pourcentage de semaine ou tu as postulé",retrieved_data.number_of_week_you_applied_rate ,"Pourcentage de semaine ou tu n'as pas postulé","Pourcentage de semaine ou tu as postulé / pas postulé")
   const chart_number_of_postualation_on_even_day_ratio = make_a_graphic2("pie" , retrieved_data.number_of_postualation_on_even_day_ratio ,"Pourcentage de jour pair ou tu as postulé",retrieved_data.number_of_postualation_on_odd_day_ratio ,"Pourcentage de jour impair ou tu as postulé","Pourcentage de jour pair/impair ou tu as postulé")
 
+
+  const chart_number_of_application_split_in_20 = make_a_graphic3("line" , dict_number_of_application_over_time_date_split_in_20,"blobloblo 200")
+  const chart_number_of_application_split_in_10 = make_a_graphic3("line" , dict_number_of_application_over_time_date_split_in_10,"blobloblo 100")
+  const chart_number_of_application_split_in_5 = make_a_graphic3("line" , dict_number_of_application_over_time_date_split_in_5,"blobloblo 555")
+  const chart_number_of_application_split_in_3 = make_a_graphic3("line" , dict_number_of_application_over_time_date_split_in_3,"blobloblo 333")
+
     // let all_company_list = generate_list(retrieved_data.all_company);
 
     return (
@@ -257,6 +285,26 @@ const DataDisplay = () => {
         {/* <ul>{all_company_list}</ul> */}
         <div className="spacer"></div>        
         
+
+        <div>
+          <AgCharts options={chart_number_of_application_split_in_20} />  
+        </div>
+        <div className="spacer"></div>        
+
+        <div>
+          <AgCharts options={chart_number_of_application_split_in_10} />  
+        </div>
+        <div className="spacer"></div>        
+
+        <div>
+          <AgCharts options={chart_number_of_application_split_in_5} />  
+        </div>
+        <div className="spacer"></div>        
+
+        <div>
+          <AgCharts options={chart_number_of_application_split_in_3} />  
+        </div>
+        <div className="spacer"></div>        
 
         {(() => {
           if (retrieved_data.number_of_application_per_day_name_value.length >= 1) {

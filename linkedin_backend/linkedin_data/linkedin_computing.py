@@ -23,6 +23,8 @@ class GenerateData():
         self.all_date_of_application: list[str] = []
         self.all_date_of_application_good_format: list[str] = []
         self.all_date_of_application_good_format2: list[str] = []
+        self.all_date_of_application_good_format3: list[str] = []
+        
         self.all_date_of_application_good_format_excluding_weekend_day: list[str] = []
         self.all_date_of_application_good_format_excluding_weekend_day2: list[str] = []
         
@@ -49,6 +51,8 @@ class GenerateData():
         self.number_of_question_per_application: list[int] = []
         self.number_of_question_per_application2: list[int] = []
         
+        self.all_application_number_over_time : list[int] = []
+        
         self.application_rate_dict : dict[str:int] = {
             "hours":0,
             "days":0,
@@ -58,6 +62,12 @@ class GenerateData():
             "decades":0            
         }
 
+        self.number_of_application_over_time:list[int] = []
+        self.number_of_application_over_time_date:list[int] = []
+        
+        self.number_of_application_over_time20:list[int] = []
+        self.number_of_application_over_time_date20:list[int] = []
+        
         self.number_to_month: dict[int:str] = {
             1:"Janvier",
             2:"Février",
@@ -125,6 +135,11 @@ class GenerateData():
         self.today_date : datetime.date = datetime.now().date()
         self.number_of_application_with_question : int = 0
         self.number_of_application_withouth_question : int = 0
+        self.number_of_application_over_time5:list[int] = []
+        self.number_of_application_over_time_date5:list[int] = []
+
+        self.number_of_application_over_time3:list[int] = []
+        self.number_of_application_over_time_date3:list[int] = []
         
         self.data_dict = {
             "number_of_application":0,
@@ -870,13 +885,15 @@ class GenerateData():
 
         
         
-        for line in self.filedata:            
+        for counter , line in enumerate(self.filedata):
+            
             if (choosen_date1 <= self.convert_date_to_right_format(line[0].split(",")[0]) <= choosen_date2) or self.convert_date_to_right_format(disclamer_choice):
                 self.list_of_company.append(line[3])
                 self.list_of_job_name.append(line[4].lower())
                 self.all_date_of_application.append(line[0].split(",")[0])
                 self.all_date_of_application_good_format.append(self.convert_date_to_right_format(line[0].split(",")[0],True))
                 self.all_date_of_application_good_format2.append(self.convert_date_to_right_format(line[0].split(",")[0],True))
+                self.all_date_of_application_good_format3.append(self.convert_date_to_right_format(line[0].split(",")[0],True))
                 
                 my_date = dtt.date(int(self.all_date_of_application_good_format[-1].split("-")[0]),int(self.all_date_of_application_good_format[-1].split("-")[1]),int(self.all_date_of_application_good_format[-1].split("-")[2]))
                 weekday_name = calendar.day_name[my_date.weekday()]
@@ -978,6 +995,8 @@ class GenerateData():
         self.data_dict["last_application_date"] = self.last_date_of_application
         self.all_date_of_application_good_format = list(set(self.all_date_of_application_good_format))
         self.all_date_of_application_good_format.sort(key=lambda date: datetime.strptime(date, '%Y-%m-%d'))
+        self.all_date_of_application_good_format3.sort(key=lambda date: datetime.strptime(date, '%Y-%m-%d'))
+        
         #self.compute_day_streak(self.all_date_of_application_good_format)
         self.all_date_of_application_good_format_excluding_weekend_day = list(set(self.all_date_of_application_good_format_excluding_weekend_day))
         self.all_date_of_application_good_format_excluding_weekend_day.sort(key=lambda date: datetime.strptime(date, '%Y-%m-%d'))
@@ -1162,10 +1181,14 @@ class GenerateData():
 
                 
         
-
         self.data_dict["all_day_application_occurence"] = self.sort_list_per_occurence(self.all_date_of_application_good_format2,list(set(self.all_date_of_application_good_format2)),False,True)[1]
         self.data_dict["all_day_application_occurence_rate"] = self.sort_list_per_occurence(self.all_date_of_application_good_format2,list(set(self.all_date_of_application_good_format2)),True,True)[1]
-        self.data_dict["all_day_application_occurence_rate_value"] = self.sort_list_per_occurence(self.all_date_of_application_good_format,list(set(self.all_date_of_application_good_format)),True,True)[0]
+        self.data_dict["all_day_application_occurence_rate_value"] = self.sort_list_per_occurence(self.all_date_of_application_good_format3,list(set(self.all_date_of_application_good_format3)),True,True)[0]
+        
+
+        #print(self.sort_list_per_occurence(self.all_date_of_application_good_format,list(set(self.all_date_of_application_good_format)),False,True) , "kporkgoper")
+
+        #print("kpger " , self.all_date_of_application_good_format2,list(set(self.all_date_of_application_good_format2)))
         
         self.data_dict["day_with_the_most_application"] = self.data_dict["all_day_application_occurence_rate_value"][0]
         
@@ -1236,15 +1259,18 @@ class GenerateData():
         for i in range(day_difference+1):
             next_day = str(choosen_date1 + dtt.timedelta(days=(i))).split(" ")[0]
             if next_day not in self.data_dict["all_day_application_occurence_rate_value"]:
+                #print("bbb out " , 0 , next_day)
                 a.append(next_day)
                 b.append(0)
                 c.append(0)
             else:
+                #print("bbb in " , self.data_dict["all_day_application_occurence"][self.data_dict["all_day_application_occurence_rate_value"].index(str(next_day))] , next_day , self.data_dict["all_day_application_occurence_rate_value"].index(str(next_day)))
                 a.append(next_day)
                 b.append(self.data_dict["all_day_application_occurence"][self.data_dict["all_day_application_occurence_rate_value"].index(str(next_day))])
                 c.append(100)
         #streak_start = str(datetime(split_date[0], split_date[1], split_date[2]) - dtt.timedelta(days=(index - 1))).split(" ")[0]
 
+        
         self.data_dict["all_day_application_occurence_rate_value_sorted"] = a
         self.data_dict["all_day_application_occurence_rate_value_sorted2"] = a
         self.data_dict["all_day_application_occurence_sorted"] = b
@@ -1393,8 +1419,83 @@ class GenerateData():
         self.data_dict["number_of_application_per_distinct_month_occurence_sorted"] = b
         self.data_dict["number_of_application_per_distinct_month_value_sorted_english"] = c
         
+        lowest_date_reverse = self.last_date_of_application.split("-")
+        self.number_of_application_over_time.append(number_of_apply)
+        self.number_of_application_over_time_date.append(f"{lowest_date_reverse[2]}-{lowest_date_reverse[1]}-{lowest_date_reverse[0]}")
         
+        self.number_of_application_over_time5.append(number_of_apply)
+        self.number_of_application_over_time_date5.append(f"{lowest_date_reverse[2]}-{lowest_date_reverse[1]}-{lowest_date_reverse[0]}")
+        
+        self.number_of_application_over_time3.append(number_of_apply)
+        self.number_of_application_over_time_date3.append(f"{lowest_date_reverse[2]}-{lowest_date_reverse[1]}-{lowest_date_reverse[0]}")
+        
+        self.number_of_application_over_time20.append(number_of_apply)
+        self.number_of_application_over_time_date20.append(f"{lowest_date_reverse[2]}-{lowest_date_reverse[1]}-{lowest_date_reverse[0]}")
+        
+        
+        application_over_time_nb = 0
+        for z in range(len(self.data_dict["all_day_application_occurence_rate_value_sorted"])):
+            application_over_time_nb+=self.data_dict["all_day_application_occurence_sorted"][z]
+            #print(self.data_dict["all_day_application_occurence_sorted"][z] , application_over_time_nb)
+            self.all_application_number_over_time.append(application_over_time_nb)
+    
+        
+        self.data_dict["all_application_number_over_time"] = self.all_application_number_over_time
+        print(self.all_application_number_over_time,len(self.all_application_number_over_time))
+        # for igloo , jennesaispascoder in enumerate(self.data_dict["all_application_number_over_time"]):
+        #     print("jennesaispascoder " , jennesaispascoder ,self.data_dict["all_application_number_over_time"][igloo])
+        
+        split_in_20 = int(len(self.all_application_number_over_time) / 19)
+        split_in_10 = int(len(self.all_application_number_over_time) / 9)
+        split_in_5 = int(len(self.all_application_number_over_time) / 4)
+        split_in_3 = int(len(self.all_application_number_over_time) / 2)
+        
+        for counter_index in range(len(self.data_dict["all_application_number_over_time"])):
+            #print(counter_index , self.all_application_number_over_time[counter_index] , " zebi")
+            if counter_index % split_in_20 == 0 and len(self.number_of_application_over_time20) < 20:
+                if counter_index == 0:
+                    self.number_of_application_over_time20.append(counter_index  + 1)
+                else:
+                    self.number_of_application_over_time20.append(self.data_dict["all_application_number_over_time"][counter_index])
+                self.number_of_application_over_time_date20.append(self.data_dict["all_day_application_occurence_rate_value_sorted"][counter_index])
             
+            if counter_index % split_in_10 == 0 and len(self.number_of_application_over_time) < 10:
+                if counter_index == 0:
+                    self.number_of_application_over_time.append(counter_index  + 1)
+                else:
+                    self.number_of_application_over_time.append(self.data_dict["all_application_number_over_time"][counter_index])
+                self.number_of_application_over_time_date.append(self.data_dict["all_day_application_occurence_rate_value_sorted"][counter_index])
+            
+            if counter_index % split_in_5 == 0 and len(self.number_of_application_over_time5) < 5:
+                if counter_index == 0:
+                        self.number_of_application_over_time5.append(counter_index  + 1)
+                else:
+                    self.number_of_application_over_time5.append(self.data_dict["all_application_number_over_time"][counter_index])
+                self.number_of_application_over_time_date5.append(self.data_dict["all_day_application_occurence_rate_value_sorted"][counter_index])
+                
+            if counter_index % split_in_3 == 0 and len(self.number_of_application_over_time3) < 3:
+                if counter_index == 0:
+                    self.number_of_application_over_time3.append(counter_index  + 1)
+                else:
+                    self.number_of_application_over_time3.append(self.data_dict["all_application_number_over_time"][counter_index])
+                self.number_of_application_over_time_date3.append(self.data_dict["all_day_application_occurence_rate_value_sorted"][counter_index])
+            
+
+        
+
+        self.data_dict["number_of_application_over_time_split_in_20"] = sorted(self.sort_list_by_date(self.number_of_application_over_time20,self.number_of_application_over_time_date20)[1])
+        self.data_dict["number_of_application_over_time_date_split_in_20"] = self.sort_list_by_date(self.number_of_application_over_time20,self.number_of_application_over_time_date20)[0]
+
+        self.data_dict["number_of_application_over_time_split_in_10"] = sorted(self.sort_list_by_date(self.number_of_application_over_time,self.number_of_application_over_time_date)[1])
+        self.data_dict["number_of_application_over_time_date_split_in_10"] = self.sort_list_by_date(self.number_of_application_over_time,self.number_of_application_over_time_date)[0]
+
+        self.data_dict["number_of_application_over_time_split_in_5"] = sorted(self.sort_list_by_date(self.number_of_application_over_time5,self.number_of_application_over_time_date5)[1])
+        self.data_dict["number_of_application_over_time_date_split_in_5"] = self.sort_list_by_date(self.number_of_application_over_time5,self.number_of_application_over_time_date5)[0]
+
+        self.data_dict["number_of_application_over_time_split_in_3"] = sorted(self.sort_list_by_date(self.number_of_application_over_time3,self.number_of_application_over_time_date3)[1])
+        self.data_dict["number_of_application_over_time_date_split_in_3"] = self.sort_list_by_date(self.number_of_application_over_time3,self.number_of_application_over_time_date3)[0]
+
+    
         # Heures
         # Jours
         # Semaines
