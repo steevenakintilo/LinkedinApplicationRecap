@@ -44,7 +44,7 @@ const WeekStatistics = () => {
         <div className="backgroundcolour">
             {Custom_navbar(1,navbar_data_display)}
             {add_space(5)}
-            <h1 className="center_text">Statistiques lié au semaines/week-ends 📊 :</h1>
+            <h1 className="center_text">Statistiques liée au semaines/week-ends 📊 :</h1>
             {add_space(7)}
             
             {(() => {

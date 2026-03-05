@@ -82,16 +82,6 @@ const DataDisplay = () => {
   const dict_number_of_application_per_year_value = generate_list_of_dict(retrieved_data.number_of_application_per_year_value,retrieved_data.number_of_application_per_year_occurence,10)
   const dict_number_of_application_per_year_value_rate = generate_list_of_dict(retrieved_data.number_of_application_per_year_value,retrieved_data.number_of_application_per_year_rate,10)
   
-  const dict_number_of_application_per_month_value = generate_list_of_dict(retrieved_data.number_of_application_per_month_value,retrieved_data.number_of_application_per_month_occurence,15)
-  const dict_number_of_application_per_month_value_rate = generate_list_of_dict(retrieved_data.number_of_application_per_month_value,retrieved_data.number_of_application_per_month_rate,15)
-  
-
-  const dict_number_of_application_per_distinct_month_value = generate_list_of_dict(retrieved_data.number_of_application_per_distinct_month_value,retrieved_data.number_of_application_per_distinct_month_occurence,500)
-  const dict_number_of_application_per_distinct_month_value_sorted = generate_list_of_dict(retrieved_data.number_of_application_per_distinct_month_value_sorted,retrieved_data.number_of_application_per_distinct_month_occurence_sorted,500)
-  const dict_number_of_application_per_distinct_month_value_rate = generate_list_of_dict(retrieved_data.number_of_application_per_distinct_month_value,retrieved_data.number_of_application_per_distinct_month_rate,500)
-  
-  
-  
   const chart_number_of_time_you_applied_to_a_company_value = make_a_graphic("bar" , dict_number_of_time_you_applied_to_a_company_value,"Nombre de candidatures par entreprise")
   const chart_number_of_time_you_applied_to_a_job_name_value = make_a_graphic("bar" , dict_number_of_time_you_applied_to_a_job_name_value,"Nombre de candidatures par poste")
   const chart_all_word_sorted_value = make_a_graphic("bar" , dict_all_word_sorted_value,"Les mots les plus présents parmis la liste de tout les mots")
@@ -106,13 +96,6 @@ const DataDisplay = () => {
   
   const chart_number_of_application_per_year_value = make_a_graphic("bar" , dict_number_of_application_per_year_value,"Nombre de fois que tu as postulé par an")
   const chart_number_of_application_per_year_value_rate = make_a_graphic("pie" , dict_number_of_application_per_year_value_rate,"Pourcentage de candidatures par an")
-  
-  const chart_number_of_application_per_month_value = make_a_graphic("bar" , dict_number_of_application_per_month_value,"Nombres de candidatures par mois")
-  const chart_number_of_application_per_month_value_rate = make_a_graphic("line" , dict_number_of_application_per_month_value_rate,"Pourcentages de candidatures par mois")
-  const chart_number_of_application_per_distinct_month_value = make_a_graphic("bar" , dict_number_of_application_per_distinct_month_value,"Nombres de candidatures par mois distinct avec au moins 1 candidatures")
-  const chart_number_of_application_per_distinct_month_value_rate = make_a_graphic("donut" , dict_number_of_application_per_distinct_month_value_rate,"Pourcentages de candidatures par mois distinct")
-  const chart_number_of_application_per_distinct_month_value_sorted = make_a_graphic("line" , dict_number_of_application_per_distinct_month_value_sorted,"Nombres de candidatures par mois distinct")
-  
 
   let navbar_data_display = make_navbar_element(retrieved_data,true)
   
@@ -412,32 +395,6 @@ const DataDisplay = () => {
         
         <div className="spacer"></div>        
         <h2>{big_line}</h2>
-             
-        {(() => {
-          if (retrieved_data.number_of_day_between_first_and_last_application > 1) {
-            return (
-              <div>
-                <h1 className="nice_font">Sur {retrieved_data.number_of_day_between_first_and_last_application} jours tu as passé {retrieved_data.number_of_day_you_applied} jours à postuler et {retrieved_data.number_of_day_you_applied_you_didnt_apply} à ne pas postuler</h1>       
-              </div>
-            )
-        }})()}
-        <br></br>
-        <br></br>
-        
-        <br></br>
-        <br></br>
-        
-        {(() => {
-          if (retrieved_data.number_of_day_between_first_and_last_application > 1) {
-            return (
-              <div>
-                <h1 className="nice_font">Sur {retrieved_data.number_of_day_between_first_and_last_application - retrieved_data.weekday_day_nb} jours sans compter les week-ends tu as passé {retrieved_data.number_of_day_you_applied_excluding_weekend} jours à postuler et {retrieved_data.number_of_day_you_didnt_apply_excluding_weekend} à ne pas postuler</h1>       
-              </div>
-            )
-        }})()}
-        <br></br>
-        <br></br>
-        
 
         <div className="spacer"></div>        
         <h2>{big_line}</h2>
@@ -502,74 +459,6 @@ const DataDisplay = () => {
             )
         }})()}
         
-        
-        {(() => {
-          if (retrieved_data.number_of_application_per_month_value.length > 1) {
-            return (
-              <div>
-                <AgCharts options={chart_number_of_application_per_month_value} />        
-              </div>
-            )
-        }})()}
-        
-        <br></br>
-        <br></br>
-
-        {(() => {
-          if (retrieved_data.number_of_application_per_month_value.length > 1) {
-            return (
-              <div>
-                <AgCharts options={chart_number_of_application_per_month_value_rate} />        
-              </div>
-            )
-        }})()}
-        
-        <div className="spacer"></div>        
-        
-        {(() => {
-          if (retrieved_data.number_of_application_per_distinct_month_value.length > 1) {
-            return (
-              <div>
-                <h2>{big_line}</h2>
-              </div>
-            )
-        }})()}
-        
-        <br></br>
-        <br></br>
-        
-        {(() => {
-          if (retrieved_data.number_of_application_per_distinct_month_value.length > 1) {
-            return (
-              <div>
-                <AgCharts options={chart_number_of_application_per_distinct_month_value_sorted} />        
-              </div>
-            )
-        }})()}
-        
-        <br></br>
-        <br></br>
-
-        {(() => {
-          if (retrieved_data.number_of_application_per_distinct_month_value.length > 1) {
-            return (
-              <div>
-                <AgCharts options={chart_number_of_application_per_distinct_month_value} />        
-              </div>
-            )
-        }})()}
-        
-        <br></br>
-        <br></br>
-
-        {(() => {
-          if (retrieved_data.number_of_application_per_distinct_month_value.length > 1) {
-            return (
-              <div>
-                <AgCharts options={chart_number_of_application_per_distinct_month_value_rate} />        
-              </div>
-            )
-        }})()}
         
         <div className="spacer"></div>        
         

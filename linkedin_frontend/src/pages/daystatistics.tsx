@@ -193,7 +193,7 @@ const DayStatistics = () => {
                 }
             })()}
             
-            {add_space(7)}
+            {add_space(4)}
             {(() => {
                 if (retrieved_data.application_day_streak_value.length <= 10 && retrieved_data.application_day_streak_value.length > 0) {
                 return (
