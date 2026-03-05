@@ -836,6 +836,16 @@ class GenerateData():
         
         return number_of_question
      
+    
+    def sort_two_list_by_int(self, list_of_element, occurence_of_element_list):
+        """A function that sort two list of int based on the first one"""
+        paired = list(zip(list_of_element, occurence_of_element_list))
+        paired.sort(key=lambda x: x[0])
+
+        list_of_element, occurence_of_element_list = zip(*paired)
+
+        return list(list_of_element), list(occurence_of_element_list)
+
     def main_function(self,choosen_date1="",choosen_date2=""):
         """A function that compute the whole data"""
         #disclamer_choice = input("Ecrit 1234 pour ne pas avoir à choisir de date sinon presse entrer: ")
@@ -1197,12 +1207,23 @@ class GenerateData():
         if len(list(set(self.list_of_application_per_year))) > 1:
             
             
+            number_of_application_over_time_year = 0
+            number_of_application_over_time_year_list = []
             
             self.data_dict["number_of_application_per_year_value"] = self.sort_list_per_occurence(self.list_of_application_per_year,list(set(self.list_of_application_per_year)),False,True)[0]
             self.data_dict["number_of_application_per_year_occurence"] = self.sort_list_per_occurence(self.list_of_application_per_year,list(set(self.list_of_application_per_year)),False,True)[1]
             self.data_dict["number_of_application_per_year_rate"] = self.sort_list_per_occurence(self.list_of_application_per_year,list(set(self.list_of_application_per_year)),True,True)[1]
             
+            self.data_dict["number_of_application_per_year_value_sorted"] = self.sort_two_list_by_int(self.data_dict["number_of_application_per_year_value"],self.data_dict["number_of_application_per_year_occurence"])[0]
             
+            self.data_dict["number_of_application_per_year_occurence_sorted"] = self.sort_two_list_by_int(self.data_dict["number_of_application_per_year_value"],self.data_dict["number_of_application_per_year_occurence"])[1]
+            
+            for year , value in zip(self.data_dict["number_of_application_per_year_value_sorted"],self.data_dict["number_of_application_per_year_occurence_sorted"]):
+                number_of_application_over_time_year+=value
+                number_of_application_over_time_year_list.append(number_of_application_over_time_year)
+            
+            self.data_dict["number_of_application_over_time_year"] = number_of_application_over_time_year_list
+
             self.list_of_application_per_year.append(int(self.all_date_of_application_good_format[-1].split("-")[0]))
 
                 

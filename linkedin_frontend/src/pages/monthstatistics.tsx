@@ -36,7 +36,7 @@ const MonthStatistics = () => {
         <div className="backgroundcolour">
             {Custom_navbar(1,navbar_data_display)}
             {add_space(5)}
-            <h1 className="center_text">Statistiques liée au mois 📊 :</h1>
+            <h1 className="center_text">Statistiques liée aux mois 📊 :</h1>
             {add_space(7)}
             
             {(() => {

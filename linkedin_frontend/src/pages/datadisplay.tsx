@@ -79,8 +79,6 @@ const DataDisplay = () => {
   const dict_number_of_question_per_application_value2 = generate_list_of_dict(retrieved_data.number_of_question_per_application_value2,retrieved_data.number_of_question_per_application_ratio2,100)
   
   
-  const dict_number_of_application_per_year_value = generate_list_of_dict(retrieved_data.number_of_application_per_year_value,retrieved_data.number_of_application_per_year_occurence,10)
-  const dict_number_of_application_per_year_value_rate = generate_list_of_dict(retrieved_data.number_of_application_per_year_value,retrieved_data.number_of_application_per_year_rate,10)
   
   const chart_number_of_time_you_applied_to_a_company_value = make_a_graphic("bar" , dict_number_of_time_you_applied_to_a_company_value,"Nombre de candidatures par entreprise")
   const chart_number_of_time_you_applied_to_a_job_name_value = make_a_graphic("bar" , dict_number_of_time_you_applied_to_a_job_name_value,"Nombre de candidatures par poste")
@@ -94,9 +92,7 @@ const DataDisplay = () => {
   
   const chart_number_of_application_with_question_ratio = make_a_graphic2("pie" , retrieved_data.number_of_application_with_question_ratio ,"Pourcentage de candidatures avec question",retrieved_data.number_of_application_withouth_question_ratio ,"Pourcentage de candidatures sans question","Pourcentage de candidature avec et sans questions")
   
-  const chart_number_of_application_per_year_value = make_a_graphic("bar" , dict_number_of_application_per_year_value,"Nombre de fois que tu as postulé par an")
-  const chart_number_of_application_per_year_value_rate = make_a_graphic("pie" , dict_number_of_application_per_year_value_rate,"Pourcentage de candidatures par an")
-
+  
   let navbar_data_display = make_navbar_element(retrieved_data,true)
   
   send_data_to_localstorage()
@@ -417,50 +413,6 @@ const DataDisplay = () => {
         <br></br>
           
 
-        {(() => {
-          if (retrieved_data.number_of_application_per_year_value.length > 1) {
-            return (
-              <div>
-                <div className="spacer"></div>        
-                <h2>{big_line}</h2>
-              </div>
-            )
-        }})()}
-
-        {(() => {
-          if (retrieved_data.number_of_application_per_year_value.length > 1) {
-            return (
-              <div>
-                <AgCharts options={chart_number_of_application_per_year_value} />        
-              </div>
-            )
-        }})()}
-
-        <br></br>
-        <br></br>
-        
-        {(() => {
-          if (retrieved_data.number_of_application_per_year_value.length > 1) {
-            return (
-              <div>
-                <AgCharts options={chart_number_of_application_per_year_value_rate} />        
-              </div>
-            )
-        }})()}
-        
-        
-        {(() => {
-          if (retrieved_data.number_of_application_per_year_value.length > 1) {
-            return (
-              <div>
-                <div className="spacer"></div>        
-                <h2>{big_line}</h2>
-              </div>
-            )
-        }})()}
-        
-        
-        <div className="spacer"></div>        
         
         
         {(() => {
