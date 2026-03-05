@@ -15,6 +15,9 @@ import {
   Paper
 } from "@mui/material";
 
+import Custom_navbar from "./navbar.tsx"
+import {add_space,go_back_to_the_main_page} from "../utility_function/utility_function.tsx"
+
 
 // Enable all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);
@@ -71,31 +74,24 @@ const DetailedStat = () => {
     navigate('/');
   }
 
-  function go_back_to_the_main_page() {
-    window.open("about:blank", "_self");
-    window.close();
-  }
-
     return (
       <div>
+
+        {Custom_navbar(2,"")}
         <h1 className="nice_font">Statistiques detaillées</h1>
-        <br></br>
-        <br></br>
-        <h1>{retrieved_data.number_of_application}</h1>
-        <br></br>
-        <br></br>
+        {add_space(5)}
         
-        <button onClick={go_back_to_the_main_page} className="big_button">
+         <button onClick={go_back_to_the_main_page} className="medium_button">
           ❌
         </button>
-        <br></br>
-        <br></br>
-        
+        {add_space(5)}
+
         <input name="myInput" placeholder="Cherche ton élement" onChange={handle_text_input}/>
+        {add_space(5)}
         <br></br>
-        
+
         {(() => {
-          if (retrieved_data[2] != -999 && retrieved_data[3] != 999999 && retrieved_data[4] != 999999 && retrieved_data[4] != 999998) {
+          if (retrieved_data[5] === 0) {
             return (
               <TableContainer component={Paper}>
                 <Table>
@@ -119,14 +115,14 @@ const DetailedStat = () => {
                 </Table>
               </TableContainer>
             )
-          } else if (retrieved_data[3] === 999999) {
+          } else if (retrieved_data[5] === 1) {
             return (
               <TableContainer component={Paper}>
                 <Table>
                   <TableHead>
                     <TableRow>
                       <TableCell>Element</TableCell>
-                      <TableCell>Nombre de jour ou tu as postulé</TableCell>
+                      <TableCell>Nombre de jours où tu as postulé</TableCell>
                     </TableRow>
                   </TableHead>
 
@@ -142,7 +138,7 @@ const DetailedStat = () => {
               </TableContainer>
             )
 
-          } else if (retrieved_data[4] === 999998) {
+          } else if (retrieved_data[5] === 2) {
             return (
               <TableContainer component={Paper}>
                 <Table>
@@ -174,7 +170,7 @@ const DetailedStat = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell>Element</TableCell>
-                      <TableCell>Nombre de jour consécutif</TableCell>
+                      <TableCell>Nombre de jours consécutif</TableCell>
                     </TableRow>
                   </TableHead>
 

@@ -6,6 +6,7 @@ import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
 
 import { ToastContainer, toast } from 'react-toastify';
 import Custom_navbar from "./navbar.tsx"
+import {add_space} from "../utility_function/utility_function.tsx"
 
 polyfillCountryFlagEmojis();
 
@@ -59,7 +60,12 @@ const HomePage = () => {
       if (Object.keys(linkedin_retrieved_data.jsonData).length > 10) {
         // alert("La data a bien été generé")
         //generete_popup("La data a bien été generé");
-        navigate('/display_data',{state: linkedin_retrieved_data.jsonData});
+        localStorage.setItem(
+        "detailed_data",
+          JSON.stringify(linkedin_retrieved_data.jsonData)
+        );
+        navigate('/display_data');
+        //navigate('/display_data',{state: linkedin_retrieved_data.jsonData});
         
       } else if (linkedin_retrieved_data.message === "Not enough data on the given date") {
 //        alert("Tu n'as postuler entre les 2 dates choisies, choisis en d'autre.")  
@@ -101,14 +107,6 @@ const HomePage = () => {
       setMax_date(event.target.value)
     }
     
-    function add_space(number: int) {
-      const br_list:any = []
-      for (let i = 0 ; i < number ; i++) {
-        br_list.push(<br></br>)  
-      }
-
-      return br_list
-    }
     
     return (
       <div className="backgroundcolour">

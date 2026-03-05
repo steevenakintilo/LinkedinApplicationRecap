@@ -140,7 +140,7 @@ class GenerateData():
 
         self.number_of_application_over_time3:list[int] = []
         self.number_of_application_over_time_date3:list[int] = []
-        
+        self.all_date_of_application_good_format_weekend_day:list[str] = []
         self.data_dict = {
             "number_of_application":0,
             "number_of_application_ratio_per_day":[],
@@ -966,6 +966,8 @@ class GenerateData():
                     
                 if weekday_name in ["Saturday","Sunday"]:
                     self.number_of_application_on_weekend+=1
+                    self.all_date_of_application_good_format_weekend_day.append(self.convert_date_to_right_format(line[0].split(",")[0],True))
+
                 for word in line[4].replace("-"," ").replace("–"," ").replace("/"," ").replace(","," ").replace("("," ").replace(")"," ").split(" "):
                     if len(word) > 0 and word.lower() not in forbiden_words_for_word and word.isdigit() is False:
                         self.list_of_word.append(word.lower())
@@ -1368,8 +1370,17 @@ class GenerateData():
     
         
         self.data_dict["number_of_application_on_weekend"] = self.number_of_application_on_weekend
-        self.data_dict["number_of_non_application_on_weekend"] = weekday_day_nb - self.number_of_application_on_weekend
         
+        number_of_different_week_applied = 0
+        for week_data in list(set(self.all_date_of_application_good_format_weekend_day)):
+            split_date = list(map(int,week_data.split("-")))
+            day_after = str(datetime(split_date[0], split_date[1], split_date[2]) + dtt.timedelta(days=(1))).split(" ")[0]
+            if day_after not in list(set(self.all_date_of_application_good_format_weekend_day)):
+                number_of_different_week_applied+=1
+
+        self.data_dict["number_of_different_weekend_you_applied"] = number_of_different_week_applied
+        self.data_dict["number_of_non_application_on_weekend"] = int(weekday_day_nb/2)  - number_of_different_week_applied
+
         #all_date_of_application_good_format_excluding_weekend_day
 
         #print(len(self.all_date_of_application_good_format_excluding_weekend_day) ,number_of_apply )
@@ -1386,6 +1397,7 @@ class GenerateData():
         self.data_dict["number_of_day_you_didnt_apply_excluding_weekend"] = day_difference - len(list(set(self.all_date_of_application_good_format_excluding_weekend_day))) - weekday_day_nb
         self.data_dict["number_of_day_you_didnt_apply_excluding_weekend_rate"] = round((day_difference - len(list(set(self.all_date_of_application_good_format_excluding_weekend_day))) - weekday_day_nb)/(day_difference - weekday_day_nb) , 3) * 100
         self.data_dict["weekday_day_nb"] = weekday_day_nb
+        self.data_dict["weekday_day_nb_single"] = int(weekday_day_nb/2)
 
         if self.number_of_application_on_even_day > 0 and self.number_of_application_on_odd_day > 0:
             self.data_dict["number_of_postualation_on_even_day"] = self.number_of_application_on_even_day

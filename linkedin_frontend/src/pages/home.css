@@ -49,6 +49,10 @@
     font-size: 100px
 }
 
+.medium_button {
+    font-size: 50px
+}
+
 .flag_button {
   font-family: "Twemoji Country Flags", "Helvetica", "Comic Sans", serif;
 }
@@ -63,4 +67,13 @@
 
 .big_date_input {
   font-size: 1.8rem
+}
+
+.center_text {
+  text-align: center;
+}
+
+.center_button {
+  display: flex;
+  justify-content: center;
 }
