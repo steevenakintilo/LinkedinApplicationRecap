@@ -145,12 +145,7 @@ export function make_navbar_element(retrieved_data:any,no_return_button:boolean=
         data_to_display_element_list_name.push("Entreprise 📊")
         data_to_display_element_page_list_name.push("company")
     }
-
-    if (retrieved_data.number_of_application >= 0) {
-        data_to_display_element_list_name.push("Poste 📊")
-        data_to_display_element_page_list_name.push("application")
-    }
-
+    
     // data_to_display_element_list_name.push("Retour ⬅️")
     // data_to_display_element_page_list_name.push("back")
 

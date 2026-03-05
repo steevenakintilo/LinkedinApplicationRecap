@@ -9,7 +9,7 @@ import WeekStatistics from './pages/weekstatistics';
 import MonthStatistics from './pages/monthstatistics';
 import YearStatistics from './pages/yearstatistics';
 import QuestionStatistics from './pages/questionstatistics';
-
+import CompanyStatistics from './pages/companystatistics';
 
 function App() {
   return (
@@ -20,10 +20,10 @@ function App() {
         <Route path="/detailed_stat" element={<DetailedStat />} />
         <Route path="/day_statistics" element={<DayStatistics />} />
         <Route path="/week_statistics" element={<WeekStatistics />} />
-        <Route path="month_statistics" element={<MonthStatistics />} />
-        <Route path="year_statistics" element={<YearStatistics />} />
-        <Route path="question_statistics" element={<QuestionStatistics />} />
-        <Route path="/back_statistics" element={<DataDisplay />} />
+        <Route path="/month_statistics" element={<MonthStatistics />} />
+        <Route path="/year_statistics" element={<YearStatistics />} />
+        <Route path="/question_statistics" element={<QuestionStatistics />} />
+        <Route path="/company_statistics" element={<CompanyStatistics />} />
       </Routes>
     </BrowserRouter>
   );
