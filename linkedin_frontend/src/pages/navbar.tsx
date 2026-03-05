@@ -10,20 +10,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './navbar.css'
 
-const Custom_navbar = (type:number = 0 , variable:string = "") => {
+const Custom_navbar = (type:number = 0 , variable:any = "") => {
     
     if (type === 0 ) {
         return (
         <nav className="navbar navbar-expand-lg  navbarBGcolor fixed-top navbar_color">
         <div className="container-fluid">
-            <a className="navbar-brand" href="/">LinkedinApplicationRecap</a>
+            <a className="navbar-brand navbar_text_color" href="/">LinkedinApplicationRecap</a>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
                 <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a className="nav-link dropdown-toggle navbar_text_color" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Langue
                 </a>
                 <ul className="dropdown-menu">
@@ -38,26 +38,17 @@ const Custom_navbar = (type:number = 0 , variable:string = "") => {
     ) 
     } else {
         return (
-        <nav className="navbar navbar-expand-lg bg-body-tertiary">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossOrigin="anonymous"></link>
+        <nav className="navbar navbar-expand-lg  navbarBGcolor fixed-top navbar_color">
         <div className="container-fluid">
-            <a className="navbar-brand" href="#">LinkedinApplicationRecap</a>
+            <a className="navbar-brand navbar_text_color" href="/">LinkedinApplicationRecap</a>
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
                 <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="/">🏠 Home</a>
-                </li>
-                <li className="nav-item">
-                <a className="nav-link" href="#">Features</a>
-                </li>
-                <li className="nav-item">
-                <a className="nav-link" href="#">Pricing</a>
-                </li>
-                <li className="nav-item">
-                <a className="nav-link disabled" aria-disabled="true">Disabled</a>
+                <a className="navbar-brand navbar_text_color " aria-current="page" href="/">🏠 Home</a>
+                {variable}
                 </li>
             </ul>
             </div>

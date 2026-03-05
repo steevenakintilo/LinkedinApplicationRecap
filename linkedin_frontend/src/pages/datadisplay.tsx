@@ -161,7 +161,7 @@ const DataDisplay = () => {
 
     return graph_data
   }
-
+  
   
   const max_number_for_display = 450
   const dict_number_of_application_per_day_name_value_sorted = generate_list_of_dict(retrieved_data.number_of_application_per_day_name_value_sorted,retrieved_data.number_of_application_per_day_name_occurence_sorted,10)
@@ -217,16 +217,16 @@ const DataDisplay = () => {
   const chart_number_of_application_per_hour_value_sorted = make_a_graphic("line" , dict_number_of_application_per_hour_value_sorted,"Nombre de candidatures par heure")
   const chart_number_of_application_per_hour_ratio = make_a_graphic("bar" , dict_number_of_application_per_hour_ratio,"Pourcentage de candidatures par heure")
   const chart_number_of_time_you_applied_to_a_company_value = make_a_graphic("bar" , dict_number_of_time_you_applied_to_a_company_value,"Nombre de candidatures par entreprise")
-  const chart_number_of_time_you_applied_to_a_job_name_value = make_a_graphic("bar" , dict_number_of_time_you_applied_to_a_company_value,"Nombre de candidatures par poste")
+  const chart_number_of_time_you_applied_to_a_job_name_value = make_a_graphic("bar" , dict_number_of_time_you_applied_to_a_job_name_value,"Nombre de candidatures par poste")
   const chart_all_word_sorted_value = make_a_graphic("bar" , dict_all_word_sorted_value,"Les mots les plus présents parmis la liste de tout les mots")
   const chart_all_word_occurence_to_job_name_value = make_a_graphic("bar" , dict_all_word_occurence_to_job_name_value,"Les mots les plus présents dans le titre des annonces")
-  const chart_all_question_sorted_value = make_a_graphic("bar" , dict_all_word_occurence_to_job_name_value,"Les questions les plus demandées")
-  const chart_number_of_question_per_application_value_sorted = make_a_graphic("line" , dict_all_word_occurence_to_job_name_value,"Nombre de questions par offres")
-  const chart_number_of_question_per_application_value = make_a_graphic("bar" , dict_all_word_occurence_to_job_name_value,"Pourcentage de questions par offres qui ont au moins 1 question")
-  const chart_number_of_question_per_application_value2 = make_a_graphic("bar" , dict_all_word_occurence_to_job_name_value,"Pourcentage de questions par offres")
+  const chart_all_question_sorted_value = make_a_graphic("bar" , dict_all_question_sorted_value,"Les questions les plus demandées")
+  const chart_number_of_question_per_application_value_sorted = make_a_graphic("line" , dict_number_of_question_per_application_value_sorted,"Nombre de questions par offres")
+  const chart_number_of_question_per_application_value = make_a_graphic("bar" , dict_number_of_question_per_application_value,"Pourcentage de questions par offres qui ont au moins 1 question")
+  const chart_number_of_question_per_application_value2 = make_a_graphic("bar" , dict_number_of_question_per_application_value2,"Pourcentage de questions par offres")
   
   
-  const chart_number_of_application_with_question_ratio = make_a_graphic2("pie" , retrieved_data.number_of_application_with_question_ratio ,"Candidatures avec question",retrieved_data.number_of_application_withouth_question_ratio ,"Candidatures sans question","Pourcentage de candidature avec et sans questions")
+  const chart_number_of_application_with_question_ratio = make_a_graphic2("pie" , retrieved_data.number_of_application_with_question_ratio ,"Pourcentage de candidatures avec question",retrieved_data.number_of_application_withouth_question_ratio ,"Pourcentage de candidatures sans question","Pourcentage de candidature avec et sans questions")
   
   const chart_application_day_streak_value = make_a_graphic("bar" , dict_application_day_streak_value,"Nombre de jours consécutif ou tu as postulé")
   const chart_non_application_day_streak_value = make_a_graphic("bar" , dict_non_application_day_streak_value,"Nombre de jours consécutif ou tu n'as pas postulé")
@@ -259,12 +259,59 @@ const DataDisplay = () => {
   const chart_number_of_application_split_in_5 = make_a_graphic3("line" , dict_number_of_application_over_time_date_split_in_5,"blobloblo 555")
   const chart_number_of_application_split_in_3 = make_a_graphic3("line" , dict_number_of_application_over_time_date_split_in_3,"blobloblo 333")
 
+  let data_to_display_element_list_name : any = ["Jour 📊"]
+  let data_to_display_element_page_list_name : any = ["day"]
+  
+  if (retrieved_data.number_of_day_between_first_and_last_application > 7) {
+      data_to_display_element_list_name.push("Semaine  📊")
+      data_to_display_element_page_list_name.push("week")
+  }
+
+  if (retrieved_data.number_of_day_between_first_and_last_application > 31) {
+      data_to_display_element_list_name.push("Mois 📊")
+      data_to_display_element_page_list_name.push("month")
+  }
+  
+  if (retrieved_data.number_of_day_between_first_and_last_application > 365) {
+      data_to_display_element_list_name.push("Année 📊")
+      data_to_display_element_page_list_name.push("year")
+  }
+  
+  if (retrieved_data.number_of_application_with_question >= 5) {
+      data_to_display_element_list_name.push("Question 📊")
+      data_to_display_element_page_list_name.push("question")
+  }
+
+  if (retrieved_data.number_of_application >= 0) {
+      data_to_display_element_list_name.push("Entreprise 📊")
+      data_to_display_element_page_list_name.push("company")
+  }
+
+  if (retrieved_data.number_of_application >= 0) {
+      data_to_display_element_list_name.push("Poste 📊")
+      data_to_display_element_page_list_name.push("application")
+  }
+  
+  
+
+  console.log("yolo " , data_to_display_element_list_name)
+
+  let navbar_data_display : any = []
+  for (let i = 0 ; i < data_to_display_element_list_name.length ; i++) {
+    let page_to_go = "/"+data_to_display_element_page_list_name[i]+"_statistics"
+    console.log("page_to_go " , page_to_go.replace(" ",""))
+    navbar_data_display.push(<a className="navbar-brand navbar_text_color " aria-current="page" href={page_to_go.replace(" ","")}> {data_to_display_element_list_name[i]} </a>)
+  }
+
+
+  //<a className="navbar-brand navbar_text_color " aria-current="page" href="/"> fjofjkopzfpozf</a>
+
     // let all_company_list = generate_list(retrieved_data.all_company);
 
     return (
       <div>
         <ToastContainer />
-        {Custom_navbar()}
+        {Custom_navbar(1,navbar_data_display)}
         <header>
         </header>
         <h1 className="nice_font">Voici les statistiques de tes candidatures:</h1>

@@ -422,7 +422,7 @@ class GenerateData():
             return f"20{split_date[2]}-{split_date[0]}-{split_date[1]}"
         return datetime(int(f"20{split_date[2]}"), int(split_date[0]), int(split_date[1]))
     
-    def compute_day_streak(self,list_,weekend=False):
+    def compute_day_streak(self,list_,weekend=False,debug_print=False):
         """A function that compute the day streak of a list"""
         current_day = list_[0]
         index = 1
@@ -450,8 +450,12 @@ class GenerateData():
                 #print(i , self.number_of_day_between_two_date(elem,current_day) ,my_date , my_date2 , weekday_name,weekday_name2)
                 #print(elem,current_day,self.number_of_day_between_two_date(elem,current_day) , index)
                 pass
-            # if self.number_of_day_between_two_date(elem,current_day) == 3 and i != 0 and weekend == True and weekday_name2 == "Friday" and weekday_name == "Monday":
-            #     index+=3
+            
+            # if debug_print:
+            #    print(self.number_of_day_between_two_date(elem,current_day) , weekday_name2 , weekday_name , current_day , elem) 
+            
+            if self.number_of_day_between_two_date(elem,current_day) == 4 and i != 0 and weekend == True and weekday_name2 == "Friday" and weekday_name == "Monday":
+                index+=3
             
             if self.number_of_day_between_two_date(elem,current_day) == 2 and i != 0:
                 index+=1
@@ -595,9 +599,18 @@ class GenerateData():
                 current_day = list_[0]
             if weekend is False:
                 if self.number_of_day_between_two_date(elem,current_day) > 1:
-                    list_of_streak.append(f"{current_day}:{elem}")
-                    list_of_streak_occurence.append(self.number_of_day_between_two_date(elem,current_day))
-
+                    split_date = list(map(int , current_day.split("-")))
+                    split_date2 = list(map(int , elem.split("-")))
+                    day_after = str(datetime(split_date[0], split_date[1], split_date[2]) + dtt.timedelta(days=(1))).split(" ")[0]
+                    day_before = str(datetime(split_date2[0], split_date2[1], split_date2[2]) - dtt.timedelta(days=(1))).split(" ")[0]
+                    
+                    if self.number_of_day_between_two_date(elem,current_day) - 3 > 1:
+                        list_of_streak.append(f"{day_after}:{day_before}")
+                        list_of_streak_occurence.append(self.number_of_day_between_two_date(elem,current_day) - 3)
+                    elif self.number_of_day_between_two_date(elem,current_day) - 3 < -1:
+                        list_of_streak.append(f"{day_before}:{day_after}")
+                        list_of_streak_occurence.append(abs(self.number_of_day_between_two_date(elem,current_day) - 3))
+                    
             if weekend:
                 if self.number_of_day_between_two_date(elem,current_day) > 1:
                     for j in range(self.number_of_day_between_two_date(elem,current_day)):
@@ -607,9 +620,20 @@ class GenerateData():
                         weekday_name = calendar.day_name[my_date.weekday()]
                         if weekday_name in ["Saturday","Sunday"]:
                             index-=1
-                    list_of_streak.append(f"{current_day}:{elem}")
-                    list_of_streak_occurence.append(self.number_of_day_between_two_date(elem,current_day) + index)
+                    
+
+                    split_date = list(map(int , current_day.split("-")))
+                    split_date2 = list(map(int , elem.split("-")))
+                    day_after = str(datetime(split_date[0], split_date[1], split_date[2]) + dtt.timedelta(days=(1))).split(" ")[0]
+                    day_before = str(datetime(split_date2[0], split_date2[1], split_date2[2]) - dtt.timedelta(days=(1))).split(" ")[0]
+                    
+                    if self.number_of_day_between_two_date(elem,current_day) - 2  - abs(index) > 2:
+                        list_of_streak.append(f"{day_after}:{day_before}")
+                        list_of_streak_occurence.append(self.number_of_day_between_two_date(elem,current_day) - 2  - abs(index))
+                    
                     index = 0
+                    
+                    
 
         paired = list(zip(list_of_streak, list_of_streak_occurence))
 
@@ -1004,7 +1028,7 @@ class GenerateData():
         self.data_dict["application_day_streak_occurence"] = self.compute_day_streak(self.all_date_of_application_good_format)[1]
         self.data_dict["application_day_streak_value"] = self.compute_day_streak(self.all_date_of_application_good_format)[0]
 
-        self.data_dict["application_day_streak_excluding_weekend_occurence"] = self.compute_day_streak(self.all_date_of_application_good_format_excluding_weekend_day,True)[1]
+        self.data_dict["application_day_streak_excluding_weekend_occurence"] = self.compute_day_streak(self.all_date_of_application_good_format_excluding_weekend_day,True,True)[1]
         self.data_dict["application_day_streak_excluding_weekend_value"] = self.compute_day_streak(self.all_date_of_application_good_format_excluding_weekend_day,True)[0]
         
         self.data_dict["non_application_day_streak_occurence"] = self.compute_non_day_streak(self.all_date_of_application_good_format)[1]
@@ -1186,6 +1210,7 @@ class GenerateData():
         self.data_dict["all_day_application_occurence_rate_value"] = self.sort_list_per_occurence(self.all_date_of_application_good_format3,list(set(self.all_date_of_application_good_format3)),True,True)[0]
         
 
+        self.data_dict["all_date_of_application_sorted"] = self.all_date_of_application_good_format
         #print(self.sort_list_per_occurence(self.all_date_of_application_good_format,list(set(self.all_date_of_application_good_format)),False,True) , "kporkgoper")
 
         #print("kpger " , self.all_date_of_application_good_format2,list(set(self.all_date_of_application_good_format2)))
@@ -1441,7 +1466,6 @@ class GenerateData():
     
         
         self.data_dict["all_application_number_over_time"] = self.all_application_number_over_time
-        print(self.all_application_number_over_time,len(self.all_application_number_over_time))
         # for igloo , jennesaispascoder in enumerate(self.data_dict["all_application_number_over_time"]):
         #     print("jennesaispascoder " , jennesaispascoder ,self.data_dict["all_application_number_over_time"][igloo])
         

@@ -6,3 +6,12 @@
 .navbar_color {
     background-color: #6c757d;
 }
+
+.navbar_text_color {
+  color: white;
+}
+
+.navbar-nav .navbar-brand {
+    margin-right: 25px;
+    margin-left: 25px;
+}
