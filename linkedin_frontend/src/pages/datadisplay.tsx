@@ -20,11 +20,9 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 const DataDisplay = () => {
   const [linkedin_data, setLinkedin_data] = useState("");
-  const location = useLocation();
   const retrieved_data = JSON.parse(localStorage.getItem("detailed_data"));
   
   //const retrieved_data = location.state;
-  const big_line = "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
   
   useEffect(() => {
       generete_popup("La data a bien été generé");

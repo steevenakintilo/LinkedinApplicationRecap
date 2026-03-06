@@ -7,6 +7,7 @@ import json
 import os
 
 from datetime import datetime
+from random import randint
 
 class GenerateData():
     """GenerateData Class"""
@@ -24,6 +25,8 @@ class GenerateData():
         self.all_date_of_application_good_format: list[str] = []
         self.all_date_of_application_good_format2: list[str] = []
         self.all_date_of_application_good_format3: list[str] = []
+        self.all_application_time : list[str] = []
+        self.all_application_time_random_end : list[str] = []
         
         self.all_date_of_application_good_format_excluding_weekend_day: list[str] = []
         self.all_date_of_application_good_format_excluding_weekend_day2: list[str] = []
@@ -267,15 +270,20 @@ class GenerateData():
         }
 
 
-    def sort_list_by_date(self,list_of_element , list_of_date,change_back_to_weekday=False,month=False,english=False):
+    def sort_list_by_date(self,list_of_element , list_of_date,change_back_to_weekday=False,month=False,english=False,minute_sorting=False,third_list=[]):
         """A function that sort list by date"""
         paired = list(zip(list_of_date, list_of_element))
         
-        if month:
-            paired.sort(key=lambda date: datetime.strptime(date[0], '%Y-%m'))
+        if minute_sorting == False:
+            if month:
+                paired.sort(key=lambda date: datetime.strptime(date[0], '%Y-%m'))
+            else:
+                paired.sort(key=lambda date: datetime.strptime(date[0], '%Y-%m-%d'))
         else:
-            paired.sort(key=lambda date: datetime.strptime(date[0], '%Y-%m-%d'))
-        
+            paired = list(zip(list_of_date, list_of_element,third_list))
+            paired.sort(key=lambda date: datetime.strptime(date[0], '%Y-%m-%d %H:%M'))
+            list_of_date , list_of_element , third_list= zip(*paired)
+            return list_of_date , list_of_element , third_list
         try:
             list_of_date , list_of_element= zip(*paired)
         except:
@@ -918,10 +926,13 @@ class GenerateData():
             self.get_content_of_a_csv_file(file)
 
         
+        current_hour = ""
         
         for counter , line in enumerate(self.filedata):
             
             if (choosen_date1 <= self.convert_date_to_right_format(line[0].split(",")[0]) <= choosen_date2) or self.convert_date_to_right_format(disclamer_choice):
+                #print(f"{str(self.convert_date_to_right_format(line[0].split(",")[0])).split(" ")[0]}:{line[0].split(",")[1].split(" ")[1]}")
+                
                 self.list_of_company.append(line[3])
                 self.list_of_job_name.append(line[4].lower())
                 self.all_date_of_application.append(line[0].split(",")[0])
@@ -960,15 +971,22 @@ class GenerateData():
                 if line[0].split(" ")[2] == "AM":
                     if int(line[0].split(" ")[1].split(":")[0]) < 12:
                         self.list_of_application_per_hour.append(str(int(line[0].split(" ")[1].split(":")[0]) + 9))
+                        current_hour = str(int(line[0].split(" ")[1].split(":")[0]) + 9)
                     else:
                         self.list_of_application_per_hour.append(str(int(line[0].split(" ")[1].split(":")[0]) - 3)) 
-                    
+                        current_hour = str(int(line[0].split(" ")[1].split(":")[0]) - 3)
+
                 else:
                     if int(line[0].split(" ")[1].split(":")[0]) in [10,11]:
                         self.list_of_application_per_hour.append(str(int(line[0].split(" ")[1].split(":")[0]) - 3))
+                        current_hour = str(int(line[0].split(" ")[1].split(":")[0]) - 3)
+
                     else:
                         self.list_of_application_per_hour.append(str(int(line[0].split(" ")[1].split(":")[0]) + 9))
-                
+                        current_hour = str(int(line[0].split(" ")[1].split(":")[0]) + 9)
+
+                self.all_application_time.append(f"{str(self.convert_date_to_right_format(line[0].split(",")[0])).split(" ")[0]} {current_hour}:{line[0].split(",")[1].split(" ")[1].split(":")[1]}")
+                self.all_application_time_random_end.append(f"{str(self.convert_date_to_right_format(line[0].split(",")[0])).split(" ")[0]} {current_hour}:{line[0].split(",")[1].split(" ")[1].split(":")[1]}#{str(randint(0,100000000))}")
                 
                 if weekday_name not in ["Saturday","Sunday"]:
                     self.all_date_of_application_good_format_excluding_weekend_day.append(self.convert_date_to_right_format(line[0].split(",")[0],True))
@@ -1551,8 +1569,12 @@ class GenerateData():
 
         self.data_dict["number_of_application_over_time_split_in_3"] = sorted(self.sort_list_by_date(self.number_of_application_over_time3,self.number_of_application_over_time_date3)[1])
         self.data_dict["number_of_application_over_time_date_split_in_3"] = self.sort_list_by_date(self.number_of_application_over_time3,self.number_of_application_over_time_date3)[0]
-
-    
+        
+        self.data_dict["all_application_time_sorted"] = self.sort_list_by_date(self.list_of_company,self.all_application_time,False,False,False,True,self.list_of_job_name)[0]
+        self.data_dict["all_company_time_sorted"] = self.sort_list_by_date(self.list_of_company,self.all_application_time,False,False,False,True,self.list_of_job_name)[1]
+        self.data_dict["all_job_name_time_sorted"] = self.sort_list_by_date(self.list_of_company,self.all_application_time,False,False,False,True,self.list_of_job_name)[2]
+        self.data_dict["all_application_time_random_end"] = self.sort_list_by_date(self.all_application_time_random_end,self.all_application_time,False,False,False,True,self.list_of_job_name)[1]
+        
         # Heures
         # Jours
         # Semaines

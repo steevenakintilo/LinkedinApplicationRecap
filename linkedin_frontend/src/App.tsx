@@ -10,6 +10,7 @@ import MonthStatistics from './pages/monthstatistics';
 import YearStatistics from './pages/yearstatistics';
 import QuestionStatistics from './pages/questionstatistics';
 import CompanyStatistics from './pages/companystatistics';
+import ApplicationHistory from './pages/applicationhistory'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/year_statistics" element={<YearStatistics />} />
         <Route path="/question_statistics" element={<QuestionStatistics />} />
         <Route path="/company_statistics" element={<CompanyStatistics />} />
+        <Route path="/application_history_statistics" element={<ApplicationHistory />} />
       </Routes>
     </BrowserRouter>
   );
