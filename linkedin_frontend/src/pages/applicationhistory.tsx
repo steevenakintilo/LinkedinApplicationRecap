@@ -20,12 +20,17 @@ import {
 
 
 const ApplicationHistory = () => {
-    // useEffect(() => {
-
-    // }, []);
-
+    
     const retrieved_data = JSON.parse(localStorage.getItem("detailed_data"));
-
+    useEffect(() => {
+        localStorage.setItem(
+        "detailed_data",
+            JSON.stringify(retrieved_data)
+        );
+        
+    }, []);
+    
+    
     let navbar_data_display = make_navbar_element(retrieved_data)
     const [text_input, settext_input] = useState("");
     const [reverse_input, setreverse_input_input] = useState(false);

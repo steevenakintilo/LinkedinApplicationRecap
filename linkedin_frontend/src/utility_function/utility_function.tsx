@@ -38,10 +38,10 @@ export function generate_list(list_:any) {
 export function go_to_detailed_stat_page(value_list:any,occurence_list:any,ratio_list:any,len_of_list:any,retrieved_data:any,type_nb:number) {
     //navigate('/detailed_stat',{state: [value_list,occurence_list,ratio_list,retrieved_data,len_of_list]});
     localStorage.setItem(
-        "detailed_data",
+        "detailed_data_stat",
         JSON.stringify([value_list, occurence_list, ratio_list, retrieved_data, len_of_list,type_nb])
     );
-
+    
     window.open('/detailed_stat', '_blank');
     }
     
@@ -161,7 +161,7 @@ export function make_navbar_element(retrieved_data:any,no_return_button:boolean=
     let navbar_data_display : any = []
     for (let i = 0 ; i < data_to_display_element_list_name.length ; i++) {
         let page_to_go = "/"+data_to_display_element_page_list_name[i]+"_statistics"
-        console.log("page_to_go " , page_to_go.replace(" ",""))
+        //console.log("page_to_go " , page_to_go.replace(" ",""))
         navbar_data_display.push(<a className="navbar-brand navbar_text_color " aria-current="page" href={page_to_go.replace(" ","")}> {data_to_display_element_list_name[i]} </a>)
     }
     if (no_return_button === true) {
@@ -183,4 +183,5 @@ export function add_space(number: number) {
 export function go_back_to_the_main_page() {
     window.open("about:blank", "_self");
     window.close();
+    
 }

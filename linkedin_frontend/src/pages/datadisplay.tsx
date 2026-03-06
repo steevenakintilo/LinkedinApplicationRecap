@@ -22,6 +22,7 @@ const DataDisplay = () => {
   const [linkedin_data, setLinkedin_data] = useState("");
   const retrieved_data = JSON.parse(localStorage.getItem("detailed_data"));
   
+  console.log("retrieved_data " , retrieved_data)
   //const retrieved_data = location.state;
   
   useEffect(() => {

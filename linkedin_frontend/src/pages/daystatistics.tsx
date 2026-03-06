@@ -7,7 +7,7 @@ import { AgCharts } from 'ag-charts-react';
 
 const DayStatistics = () => {
     const retrieved_data = JSON.parse(localStorage.getItem("detailed_data"));
-
+    console.log("ddddayyyyy " , retrieved_data)
     // 📅 Historique des candidatures
 
     let navbar_data_display = make_navbar_element(retrieved_data)

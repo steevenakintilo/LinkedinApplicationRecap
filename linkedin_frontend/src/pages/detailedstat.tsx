@@ -5,6 +5,8 @@ import { useState , useEffect } from 'react';
 import {useLocation} from 'react-router';
 import { AllCommunityModule, ModuleRegistry } from 'ag-charts-community';
 import { AgCharts } from 'ag-charts-react';
+import {make_navbar_element,make_a_graphic,generate_list_of_dict2,make_a_graphic3,make_a_graphic2} from "../utility_function/utility_function.tsx"
+
 import {
   Table,
   TableBody,
@@ -23,15 +25,9 @@ import {add_space,go_back_to_the_main_page} from "../utility_function/utility_fu
 ModuleRegistry.registerModules([AllCommunityModule]);
 
 const DetailedStat = () => {
-  const [linkedin_data, setLinkedin_data] = useState("");
+  const retrieved_data = JSON.parse(localStorage.getItem("detailed_data_stat"));
   const [text_input, settext_input] = useState("");
-  const location = useLocation();
-  // const retrieved_data = location.state;
-  const retrieved_data = JSON.parse(localStorage.getItem("detailed_data"));
-  // console.log("le riz est laaaaaaa")
-  // console.log(retrieved_data)
-  const navigate = useNavigate();
-  
+    
   function generate_list_of_dict(list_:any,list2_:any,list3_:any) {
       let list_of_dict:any = [];
       let temp_list:any = [];
@@ -67,13 +63,10 @@ const DetailedStat = () => {
   
   
   let data_dict = generate_list_of_dict(retrieved_data[0],retrieved_data[1],retrieved_data[2])
-
+  
   console.log("DETAILED STATSSSS")
   console.log(retrieved_data)
-  function go_home() {
-    navigate('/');
-  }
-
+  
     return (
       <div>
 
@@ -192,4 +185,3 @@ const DetailedStat = () => {
   }
 
 export default DetailedStat;
-
