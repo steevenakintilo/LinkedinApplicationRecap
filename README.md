@@ -71,7 +71,7 @@ Les fenêtre VS Code devrais resembler à ça
 <img width="2122" height="1086" alt="image" src="https://github.com/user-attachments/assets/035597f6-f449-4990-a5fd-3a4bb4412888" />
 
 Si tout ce deroule bien ça devrais ouvrir une page web ou tu pourras ensuite récupérer les datas comme ça:
-<img width="2558" height="1358" alt="image" src="https://github.com/user-attachments/assets/e32911cf-46f5-48ce-8324-7d98fe448208" />
+<img width="2558" height="1404" alt="image" src="https://github.com/user-attachments/assets/9ae808a1-c933-4bd8-add3-97fda9eda1d8" />
 
 
 ## Le site web
@@ -152,7 +152,7 @@ npm start
 <img width="2122" height="1086" alt="image" src="https://github.com/user-attachments/assets/035597f6-f449-4990-a5fd-3a4bb4412888" />
 
 If everything goes well, it should open a web page where you can then retrieve the data like this:
-<img width="2558" height="1358" alt="image" src="https://github.com/user-attachments/assets/e32911cf-46f5-48ce-8324-7d98fe448208" />
+<img width="2559" height="1399" alt="image" src="https://github.com/user-attachments/assets/adfe9ca7-a789-42d3-9a50-7fe355df1dd3" />
 
 ## The Website
 
