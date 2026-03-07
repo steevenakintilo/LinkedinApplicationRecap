@@ -1,7 +1,7 @@
 # LinkedinApplicationRecap
 
 LinkedinApplicationRecap est comme Spotify Recap, mais au lieu de récupérer les statistiques de tes chansons, il récupère les statistiques de tes candidatures.
-# Français France France France
+# Français 🇫🇷
 
 ## Requirements
 
@@ -84,7 +84,7 @@ C'est vraiment une version 1 du site donc le design n'est pas encore parfait dut
 
 Si le site ne marche pas ou une erreur apparait n'hésite pas à faire une issue github pour que je regarde moi même le probléme.
 
-# English United Kingdom United Kingdom United Kingdom
+# English 🇬🇧
 
 ## Requirements
 
