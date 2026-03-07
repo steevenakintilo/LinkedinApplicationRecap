@@ -853,7 +853,7 @@ class GenerateData():
         list_of_element, occurence_of_element_list = zip(*paired)
 
         return list(list_of_element), list(occurence_of_element_list)
-
+    
     def main_function(self,choosen_date1="",choosen_date2=""):
         """A function that compute the whole data"""
         #disclamer_choice = input("Ecrit 1234 pour ne pas avoir à choisir de date sinon presse entrer: ")
@@ -1236,11 +1236,21 @@ class GenerateData():
             
             self.data_dict["number_of_application_per_year_occurence_sorted"] = self.sort_two_list_by_int(self.data_dict["number_of_application_per_year_value"],self.data_dict["number_of_application_per_year_occurence"])[1]
             
-            for year , value in zip(self.data_dict["number_of_application_per_year_value_sorted"],self.data_dict["number_of_application_per_year_occurence_sorted"]):
-                number_of_application_over_time_year+=value
-                number_of_application_over_time_year_list.append(number_of_application_over_time_year)
+            
+            # for year , value in zip(self.data_dict["number_of_application_per_year_value_sorted"],self.data_dict["number_of_application_per_year_occurence_sorted"]):
+            #     number_of_application_over_time_year+=value
+            #     number_of_application_over_time_year_list.append(number_of_application_over_time_year)
+            all_year_sorted_list = []
+            for i in range(self.data_dict["number_of_application_per_year_value_sorted"][-1] - self.data_dict["number_of_application_per_year_value_sorted"][0] + 1):
+                all_year_sorted_list.append(self.data_dict["number_of_application_per_year_value_sorted"][0] + i)
+                if self.data_dict["number_of_application_per_year_value_sorted"][0] + i in self.data_dict["number_of_application_per_year_value_sorted"]:
+                    number_of_application_over_time_year+=self.data_dict["number_of_application_per_year_occurence_sorted"][self.data_dict["number_of_application_per_year_value_sorted"].index(self.data_dict["number_of_application_per_year_value_sorted"][0] + i)]
+                    number_of_application_over_time_year_list.append(number_of_application_over_time_year)
+                else:
+                    number_of_application_over_time_year_list.append(number_of_application_over_time_year)
             
             self.data_dict["number_of_application_over_time_year"] = number_of_application_over_time_year_list
+            self.data_dict["all_year_sorted"] = all_year_sorted_list
 
             self.list_of_application_per_year.append(int(self.all_date_of_application_good_format[-1].split("-")[0]))
 
@@ -1478,6 +1488,9 @@ class GenerateData():
         a = []
         b = []
         c = []
+        d = []
+        nb_of_application_per_month_over_time = 0
+
         for i in range(first_application_month - 1 , number_of_month + first_application_month - 1):
             if f"{self.number_to_month[(i%12) + 1]} {number_of_year_list[int(i/12)]}" in self.data_dict["number_of_application_per_distinct_month_value"]:
                 #print("good " , self.number_to_month[(i%12) + 1], number_of_year_list[int(i/12)])
@@ -1485,16 +1498,21 @@ class GenerateData():
                 c.append(f"{self.number_to_month_english[(i%12) + 1]} {number_of_year_list[int(i/12)]}")
                 
                 b.append(self.data_dict["number_of_application_per_distinct_month_occurence"][self.data_dict["number_of_application_per_distinct_month_value"].index(f"{self.number_to_month[(i%12) + 1]} {number_of_year_list[int(i/12)]}")])
+                nb_of_application_per_month_over_time+=self.data_dict["number_of_application_per_distinct_month_occurence"][self.data_dict["number_of_application_per_distinct_month_value"].index(f"{self.number_to_month[(i%12) + 1]} {number_of_year_list[int(i/12)]}")]
+                d.append(nb_of_application_per_month_over_time)
             else:
                 #print("bad " , self.number_to_month[(i%12) + 1], number_of_year_list[int(i/12)])
                 a.append(f"{self.number_to_month[(i%12) + 1]} {number_of_year_list[int(i/12)]}")
                 c.append(f"{self.number_to_month_english[(i%12) + 1]} {number_of_year_list[int(i/12)]}")
                 b.append(0)
+                nb_of_application_per_month_over_time+=0
+                d.append(nb_of_application_per_month_over_time)
 
         self.data_dict["number_of_application_per_distinct_month_value_sorted"] = a
         self.data_dict["number_of_application_per_distinct_month_occurence_sorted"] = b
         self.data_dict["number_of_application_per_distinct_month_value_sorted_english"] = c
-        
+        self.data_dict["nb_of_application_per_month_over_time"] = d
+
         lowest_date_reverse = self.last_date_of_application.split("-")
         self.number_of_application_over_time.append(number_of_apply)
         self.number_of_application_over_time_date.append(f"{lowest_date_reverse[2]}-{lowest_date_reverse[1]}-{lowest_date_reverse[0]}")

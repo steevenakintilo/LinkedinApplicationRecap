@@ -115,8 +115,9 @@ const CompanyStatistics = () => {
                 return (
                     <div>
                     <h1 className="nice_font">
-                        {t("key15", { 
-                            a: retrieved_data.number_of_different_job_name, 
+                        {t("key16", { 
+                            a: retrieved_data.number_of_application, 
+                            b: retrieved_data.number_of_different_job_name
                         })}
                     </h1>
  

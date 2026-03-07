@@ -48,7 +48,6 @@ const ApplicationHistory = () => {
     
     function generate_list_of_dict(list_:any,list2_:any,list3_:any) {
       let list_of_dict:any = [];
-      let temp_list:any = [];
       let number_ : number = 0;
       let pourcentage : number = 0;
       list_.forEach((data: string, index : number) => {
@@ -60,14 +59,14 @@ const ApplicationHistory = () => {
         
         //console.log("Dataaaaa " , data , data.toLowerCase().includes(text_input.toLowerCase() , text_input.length))
         if (data.toLowerCase().includes(text_input.toLowerCase()) === true || list2_[index].toLowerCase().includes(text_input.toLowerCase()) === true || list3_[index].toLowerCase().includes(text_input.toLowerCase()) === true) {
-          list_of_dict.push({ data: data.split("#")[0], number: list2_[index],rate: list3_[index] , index_:index});
+          list_of_dict.push({ data: data.split("#")[0], number: list2_[index],rate: list3_[index] , index_:(index + 1)});
           number_+=list2_[index]
           pourcentage+=list3_[index]
         }
         
         else if (text_input.length === 0) {
           
-          list_of_dict.push({ data: data, number: list2_[index],rate: list3_[index],index_:index});
+          list_of_dict.push({ data: data, number: list2_[index],rate: list3_[index],index_:(index + 1)});
         }
       });
 
@@ -101,6 +100,7 @@ const ApplicationHistory = () => {
                       <TableCell>{t("Date")}</TableCell>
                       <TableCell>{t("Nom de l'entreprise")}</TableCell>
                       <TableCell>{t("Nom du poste")}</TableCell>
+                      <TableCell>Index</TableCell>
                     </TableRow>
                   </TableHead>
 
@@ -110,6 +110,8 @@ const ApplicationHistory = () => {
                         <TableCell>{data_dict.data.split("#")[0]}</TableCell>
                         <TableCell>{data_dict.number}/{retrieved_data[4]}</TableCell>
                         <TableCell>{data_dict.rate}</TableCell>
+                        <TableCell>{data_dict.index_}</TableCell>
+                        
                       </TableRow>
                     ))}
                   </TableBody>
