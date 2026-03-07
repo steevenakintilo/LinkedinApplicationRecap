@@ -853,13 +853,12 @@ class GenerateData():
         list_of_element, occurence_of_element_list = zip(*paired)
 
         return list(list_of_element), list(occurence_of_element_list)
-
+    
     def main_function(self,choosen_date1="",choosen_date2=""):
         """A function that compute the whole data"""
-        disclamer_choice = input("Ecrit 1234 pour ne pas avoir à choisir de date sinon presse entrer: ")
+        disclamer_choice = input("Ecrit 1234 pour ne pas avoir à choisir de date sinon presse entrer \nType 1234 to avoid having to choose a date, otherwise press enter:")
+        print("\n\n")
         min_date , max_date = self.min_and_max_date_of_applicaton()
-        print(min_date)
-        print(max_date)
         if disclamer_choice == "1234":
             choosen_date1 = datetime(2000,1,1)
             choosen_date2 = datetime(3000,1,1)
@@ -882,20 +881,27 @@ class GenerateData():
         else:
             min_date , max_date = self.min_and_max_date_of_applicaton()
             print(f"Les dates doivent être entre {min_date} et {max_date} pour ne pas avoir de bug")
-            choice1 = input("Choisie une date de début sous le format Année-Mois-Jour exemple 11-05-2022: ").replace("/","-")
-            choice2 = input("Choisie une date de fin sous le format Année-Mois-Jour exemple 11-06-2023: ").replace("/","-")
+            print(f"The dates must be between {min_date} and {max_date} to avoid bugs")
+            
+            print("\n\n")
+
+            choice1 = input("Choisie une date de début sous le format Jour-Mois-Année exemple 11-05-2022\nChoose a start date in Day-Month-Year format, for example 11-05-2022: ").replace("/","-")
+            choice2 = input("Choisie une date de fin sous le format Jour-Mois-Année exemple 11-06-2023\nChoose an end date in Day-Month-Year format, for example 11-06-2023: ").replace("/","-")
             try:
                 choosen_date1 = datetime(int(choice1.split("-")[2]), int(choice1.split("-")[1]), int(choice1.split("-")[0]))
                 choosen_date2 = datetime(int(choice2.split("-")[2]), int(choice2.split("-")[1]), int(choice2.split("-")[0]))
                 if choosen_date1 == choosen_date2:
                     print("Les dates ne peuvent pas être les mêmes")
-
+                    print("The dates cannot be the same")
+                    
                 if choosen_date1 > choosen_date2:
                     print("La date 1 doit être supérieur à la date 2")
+                    print("Date 1 must be greater than date 2")
                 
 
             except ValueError:
                 print("Erreur de date recommence")
+                print("Date error, please restart")
                 return
 
             #choosen_date1 = "2025-09-27"
@@ -1234,11 +1240,21 @@ class GenerateData():
             
             self.data_dict["number_of_application_per_year_occurence_sorted"] = self.sort_two_list_by_int(self.data_dict["number_of_application_per_year_value"],self.data_dict["number_of_application_per_year_occurence"])[1]
             
-            for year , value in zip(self.data_dict["number_of_application_per_year_value_sorted"],self.data_dict["number_of_application_per_year_occurence_sorted"]):
-                number_of_application_over_time_year+=value
-                number_of_application_over_time_year_list.append(number_of_application_over_time_year)
+            
+            # for year , value in zip(self.data_dict["number_of_application_per_year_value_sorted"],self.data_dict["number_of_application_per_year_occurence_sorted"]):
+            #     number_of_application_over_time_year+=value
+            #     number_of_application_over_time_year_list.append(number_of_application_over_time_year)
+            all_year_sorted_list = []
+            for i in range(self.data_dict["number_of_application_per_year_value_sorted"][-1] - self.data_dict["number_of_application_per_year_value_sorted"][0] + 1):
+                all_year_sorted_list.append(self.data_dict["number_of_application_per_year_value_sorted"][0] + i)
+                if self.data_dict["number_of_application_per_year_value_sorted"][0] + i in self.data_dict["number_of_application_per_year_value_sorted"]:
+                    number_of_application_over_time_year+=self.data_dict["number_of_application_per_year_occurence_sorted"][self.data_dict["number_of_application_per_year_value_sorted"].index(self.data_dict["number_of_application_per_year_value_sorted"][0] + i)]
+                    number_of_application_over_time_year_list.append(number_of_application_over_time_year)
+                else:
+                    number_of_application_over_time_year_list.append(number_of_application_over_time_year)
             
             self.data_dict["number_of_application_over_time_year"] = number_of_application_over_time_year_list
+            self.data_dict["all_year_sorted"] = all_year_sorted_list
 
             self.list_of_application_per_year.append(int(self.all_date_of_application_good_format[-1].split("-")[0]))
 
@@ -1304,12 +1320,17 @@ class GenerateData():
             choosen_date2_string = f"{str(self.last_date_of_application).split("-")[2]}-{str(self.last_date_of_application).split("-")[1]}-{str(self.last_date_of_application).split("-")[0]}"
             
             day_difference = self.number_of_day_between_two_date(choosen_date2_string,choosen_date1_string)
+        #    print("caca1 " , day_difference)
         else:
+            print("iciiii " , choosen_date2_string,choosen_date1_string)
             day_difference = self.number_of_day_between_two_date(choosen_date2_string,choosen_date1_string)
             #print("caca2 " , day_difference , choosen_date2_string , choosen_date1_string)
 
         if len(list(set(self.all_date_of_application))) > day_difference:
+            #print(day_difference)
+            #print(list(set(self.all_date_of_application)) ,"icooooo")
             day_difference = len(list(set(self.all_date_of_application)))
+            #print("caca3 " , day_difference)
 
 
         #a , b = self.sort_list_by_date(self.data_dict["all_day_application_occurence"],self.data_dict["all_day_application_occurence_rate_value"])
@@ -1383,10 +1404,10 @@ class GenerateData():
 
         if hours_time is False:
             self.data_dict["number_of_application_sentence"] = f"Tu as postulé à {int(self.data_dict["number_of_application"])} offre(s) entre le {choosen_date1_string} et le {choosen_date2_string} en {day_difference} jour(s) ce qui fait une  moyenne de {self.application_rate_dict["days"]} candidatures par jour , {self.application_rate_dict["weeks"]} candidatures par semaines , {self.application_rate_dict["months"]} candidatures par mois , {self.application_rate_dict["years"]} candidatures par années , {self.application_rate_dict["decades"]} candidatures par décennies"
-            
+            self.data_dict["number_of_application_sentence_english"] = f"You applied to {int(self.data_dict["number_of_application"])} job(s) between {choosen_date1_string} and {choosen_date2_string} in {day_difference} day(s), resulting in an average of {self.application_rate_dict["days"]} applications per day, {self.application_rate_dict["weeks"]} applications per week, {self.application_rate_dict["months"]} applications per month, {self.application_rate_dict["years"]} applications per year, {self.application_rate_dict["decades"]} applications per decade."
         else:
             self.data_dict["number_of_application_sentence"] = f"Tu as postulé à {int(self.data_dict["number_of_application"])} offre(s) entre le {choosen_date1_string} et le {choosen_date2_string} en {day_difference} jour(s) ce qui fait une  moyenne de {self.application_rate_dict["hours"]} candidatures par heures , {self.application_rate_dict["days"]} candidatures par jour , {self.application_rate_dict["weeks"]} candidatures par semaines , {self.application_rate_dict["months"]} candidatures par mois , {self.application_rate_dict["years"]} candidatures par années , {self.application_rate_dict["decades"]} candidatures par décennies"
-            
+            self.data_dict["number_of_application_sentence_english"] = f"You applied to {int(self.data_dict["number_of_application"])} job(s) between {choosen_date1_string} and {choosen_date2_string} in {day_difference} day(s), resulting in an average of {self.application_rate_dict["hours"]} applications per hour, {self.application_rate_dict["days"]} applications per day, {self.application_rate_dict["weeks"]} applications per week, {self.application_rate_dict["months"]} applications per month, {self.application_rate_dict["years"]} applications per year, {self.application_rate_dict["decades"]} applications per decade"
         self.data_dict["number_of_application_ratio"] = self.application_rate_dict
         self.data_dict["number_of_day_you_applied"] = len(list(set(self.all_date_of_application)))
         self.data_dict["number_of_day_you_applied_rate"] = round(len(list(set(self.all_date_of_application)))/day_difference , 3) * 100
@@ -1471,6 +1492,9 @@ class GenerateData():
         a = []
         b = []
         c = []
+        d = []
+        nb_of_application_per_month_over_time = 0
+        
         for i in range(first_application_month - 1 , number_of_month + first_application_month - 1):
             if f"{self.number_to_month[(i%12) + 1]} {number_of_year_list[int(i/12)]}" in self.data_dict["number_of_application_per_distinct_month_value"]:
                 #print("good " , self.number_to_month[(i%12) + 1], number_of_year_list[int(i/12)])
@@ -1478,16 +1502,21 @@ class GenerateData():
                 c.append(f"{self.number_to_month_english[(i%12) + 1]} {number_of_year_list[int(i/12)]}")
                 
                 b.append(self.data_dict["number_of_application_per_distinct_month_occurence"][self.data_dict["number_of_application_per_distinct_month_value"].index(f"{self.number_to_month[(i%12) + 1]} {number_of_year_list[int(i/12)]}")])
+                nb_of_application_per_month_over_time+=self.data_dict["number_of_application_per_distinct_month_occurence"][self.data_dict["number_of_application_per_distinct_month_value"].index(f"{self.number_to_month[(i%12) + 1]} {number_of_year_list[int(i/12)]}")]
+                d.append(nb_of_application_per_month_over_time)
             else:
                 #print("bad " , self.number_to_month[(i%12) + 1], number_of_year_list[int(i/12)])
                 a.append(f"{self.number_to_month[(i%12) + 1]} {number_of_year_list[int(i/12)]}")
                 c.append(f"{self.number_to_month_english[(i%12) + 1]} {number_of_year_list[int(i/12)]}")
                 b.append(0)
+                nb_of_application_per_month_over_time+=0
+                d.append(nb_of_application_per_month_over_time)
 
         self.data_dict["number_of_application_per_distinct_month_value_sorted"] = a
         self.data_dict["number_of_application_per_distinct_month_occurence_sorted"] = b
         self.data_dict["number_of_application_per_distinct_month_value_sorted_english"] = c
-        
+        self.data_dict["nb_of_application_per_month_over_time"] = d
+
         lowest_date_reverse = self.last_date_of_application.split("-")
         self.number_of_application_over_time.append(number_of_apply)
         self.number_of_application_over_time_date.append(f"{lowest_date_reverse[2]}-{lowest_date_reverse[1]}-{lowest_date_reverse[0]}")
