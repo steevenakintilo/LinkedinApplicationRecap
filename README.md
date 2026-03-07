@@ -148,7 +148,8 @@ In the second window, you need to go to the linkedin_frontend folder and then ru
 
 ```
 npm start
-``` The VS Code windows should look like this:
+```
+The VS Code windows should look like this:
 <img width="2122" height="1086" alt="image" src="https://github.com/user-attachments/assets/035597f6-f449-4990-a5fd-3a4bb4412888" />
 
 If everything goes well, it should open a web page where you can then retrieve the data like this:
