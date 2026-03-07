@@ -8,12 +8,24 @@ import { ToastContainer, toast } from 'react-toastify';
 import Custom_navbar from "./navbar.tsx"
 import {make_navbar_element,make_a_graphic,generate_list_of_dict,add_space,go_to_detailed_stat_page,generate_list_of_dict2,make_a_graphic3,make_a_graphic2} from "../utility_function/utility_function.tsx"
 import { AgCharts } from 'ag-charts-react';
+import { useTranslation } from 'react-i18next'
 
 const CompanyStatistics = () => {
     const retrieved_data = JSON.parse(localStorage.getItem("detailed_data"));
 
     // 📅 Historique des candidatures
 
+    const { t, i18n } = useTranslation()
+
+    useEffect(() => {
+        if (retrieved_data.language == "fr") {
+            i18n.changeLanguage("fr");
+        } else {
+            i18n.changeLanguage("en");
+            console.log("the page should be in english");
+        }
+    }, []);
+    
     let navbar_data_display = make_navbar_element(retrieved_data)
 
     const dict_number_of_time_you_applied_to_a_company_value = generate_list_of_dict(retrieved_data.number_of_time_you_applied_to_a_company_value,retrieved_data.number_of_time_you_applied_to_a_company_occurence,10)
@@ -24,17 +36,17 @@ const CompanyStatistics = () => {
     
     
     
-    const chart_number_of_time_you_applied_to_a_company_value = make_a_graphic("bar" , dict_number_of_time_you_applied_to_a_company_value,"Nombre de candidatures par entreprise")
-    const chart_number_of_time_you_applied_to_a_job_name_value = make_a_graphic("bar" , dict_number_of_time_you_applied_to_a_job_name_value,"Nombre de candidatures par poste")
-    const chart_all_word_sorted_value = make_a_graphic("bar" , dict_all_word_sorted_value,"Les mots les plus présents parmis la liste de tout les mots")
-    const chart_all_word_occurence_to_job_name_value = make_a_graphic("bar" , dict_all_word_occurence_to_job_name_value,"Les mots les plus présents dans le titre des annonces")
+    const chart_number_of_time_you_applied_to_a_company_value = make_a_graphic("bar" , dict_number_of_time_you_applied_to_a_company_value,t("Nombre de candidatures par entreprise"))
+    const chart_number_of_time_you_applied_to_a_job_name_value = make_a_graphic("bar" , dict_number_of_time_you_applied_to_a_job_name_value,t("Nombre de candidatures par poste"))
+    const chart_all_word_sorted_value = make_a_graphic("bar" , dict_all_word_sorted_value,t("Les mots les plus présents parmis la liste de tout les mots"))
+    const chart_all_word_occurence_to_job_name_value = make_a_graphic("bar" , dict_all_word_occurence_to_job_name_value,t("Les mots les plus présents dans le titre des annonces"))
     
 
     return (
         <div className="backgroundcolour">
             {Custom_navbar(1,navbar_data_display)}
             {add_space(5)}
-            <h1 className="center_text">Statistiques liées aux entreprises/postes/mots 📊 :</h1>
+            <h1 className="center_text">{t("Statistiques liées aux entreprises/postes/mots 📊 :")}</h1>
             {add_space(7)}
             {(() => {
                 if (retrieved_data.all_company.length === 0) {
@@ -45,14 +57,24 @@ const CompanyStatistics = () => {
                 } else if (retrieved_data.all_company.length <= 10) {
                 return (
                     <div>
-                    <h1 className="nice_font">Tu as postulé à {retrieved_data.number_of_company} différentes entreprises</h1>
+                    <h1 className="nice_font">
+                        {t("key13", { 
+                            a: retrieved_data.number_of_company, 
+                        })}
+                    </h1>
+                    
                     <AgCharts options={chart_number_of_time_you_applied_to_a_company_value} />        
                     </div>
                 )
                 } else {
                 return (
                     <div>
-                    <h1 className="nice_font">Tu as postulé à {retrieved_data.number_of_company} différentes entreprises</h1>
+                    <h1 className="nice_font">
+                        {t("key13", { 
+                            a: retrieved_data.number_of_company, 
+                        })}
+                    </h1>
+ 
                     <AgCharts options={chart_number_of_time_you_applied_to_a_company_value} />
                     <div className="center_button">
                         <button className="btn btn-secondary"
@@ -67,7 +89,7 @@ const CompanyStatistics = () => {
                             )
                             }
                         >
-                            Toutes les statistiques 📊
+                            {t("Toutes les statistiques 📊")}
                         </button>
                     </div>            
                     </div>
@@ -80,14 +102,24 @@ const CompanyStatistics = () => {
                 if (retrieved_data.number_of_different_job_name <= 5) {
                 return (
                     <div>
-                    <h1 className="nice_font">Tu as postulé à {retrieved_data.number_of_different_job_name} différents postes</h1>
+                    <h1 className="nice_font">
+                        {t("key14", { 
+                            a: retrieved_data.number_of_different_job_name, 
+                        })}
+                    </h1>
+ 
                     <AgCharts options={chart_number_of_time_you_applied_to_a_job_name_value} />        
                     </div>
                 )
                 } else {
                 return (
                     <div>
-                    <h1 className="nice_font">Tu as postulé à {retrieved_data.number_of_different_job_name} différents postes</h1>
+                    <h1 className="nice_font">
+                        {t("key15", { 
+                            a: retrieved_data.number_of_different_job_name, 
+                        })}
+                    </h1>
+ 
                     <AgCharts options={chart_number_of_time_you_applied_to_a_job_name_value} />
                     <div className="center_button">
                         <button className="btn btn-secondary"
@@ -103,7 +135,7 @@ const CompanyStatistics = () => {
                             )
                             }
                         >
-                            Toutes les statistiques 📊
+                            {t("Toutes les statistiques 📊")}
                         </button>
                     </div>            
                     </div>
@@ -116,14 +148,27 @@ const CompanyStatistics = () => {
                 if (retrieved_data.number_of_word <= 10) {
                 return (
                     <div>
-                    <h1 className="nice_font">Parmi toutes les annonces auxquelles tu as postulé, il y avait {retrieved_data.number_of_word} mots et {retrieved_data.number_of_different_word} mots différents</h1>
+                    <h1 className="nice_font">
+                        {t("key15", { 
+                            a: retrieved_data.number_of_word,
+                            b: retrieved_data.number_of_different_word
+                            
+                        })}
+                    </h1>
+ 
                     <AgCharts options={chart_all_word_sorted_value} />        
                     </div>
                 )
                 } else {
                 return (
                     <div>
-                    <h1 className="nice_font">Parmi toutes les annonces auxquelles tu as postulé, il y avait {retrieved_data.number_of_word} mots et {retrieved_data.number_of_different_word} mots différents</h1>
+                    <h1 className="nice_font">
+                        {t("key15", { 
+                            a: retrieved_data.number_of_word,
+                            b: retrieved_data.number_of_different_word
+                            
+                        })}
+                    </h1>
                     <AgCharts options={chart_all_word_sorted_value} />
                     <div className="center_button">
                         <button className="btn btn-secondary"
@@ -138,7 +183,7 @@ const CompanyStatistics = () => {
                             )
                             }
                         >
-                            Toutes les statistiques 📊
+                            {t("Toutes les statistiques 📊")}
                         </button>
                     </div>                            
                     </div>
@@ -152,15 +197,15 @@ const CompanyStatistics = () => {
                 if (retrieved_data.all_company.number_of_different_word <= 10) {
                 return (
                     <div>
-                    <h1 className="nice_font">La différence avec l'autre statistique est qu'ici on regarde si un mot apparait dans le texte de l'annonce le mot peut être présent sur 3 annonces sur 3 mais si les annonces ont 500 mots sont % de présence parmis tous les mots sera faible</h1>
+                    <h1 className="nice_font">{t("La différence avec l'autre statistique est qu'ici on regarde si un mot apparait dans le texte de l'annonce le mot peut être présent sur 3 annonces sur 3 mais si les annonces ont 500 mots sont % de présence parmis tous les mots sera faible")}</h1>
                     <AgCharts options={chart_all_word_occurence_to_job_name_value} />        
                     </div>
                 )
                 } else {
                 return (
                     <div>
-                    <h1 className="nice_font">La différence avec l'autre statistique est qu'ici on regarde si un mot apparait dans le texte de l'annonce</h1>
-                    <h1 className="nice_font"> Le mot peut être présent sur 3 annonces sur 3 mais si les annonces ont 500 mots sont % de présences parmis tout les mots sera faible</h1>
+                    <h1 className="nice_font">{t("La différence avec l'autre statistique est qu'ici on regarde si un mot apparait dans le texte de l'annonce")}</h1>
+                    <h1 className="nice_font"> {t("Le mot peut être présent sur 3 annonces sur 3 mais si les annonces ont 500 mots sont % de présences parmis tout les mots sera faible")}</h1>
                     <AgCharts options={chart_all_word_occurence_to_job_name_value} />
                     <div className="center_button">
                         <button className="btn btn-secondary"
@@ -176,7 +221,7 @@ const CompanyStatistics = () => {
                             )
                             }
                         >
-                            Toutes les statistiques 📊
+                            {t("Toutes les statistiques 📊")}
                         </button>
                     </div>            
                     </div>

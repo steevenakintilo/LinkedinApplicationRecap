@@ -7,6 +7,8 @@ import { AllCommunityModule, ModuleRegistry } from 'ag-charts-community';
 import { AgCharts } from 'ag-charts-react';
 import {make_navbar_element,make_a_graphic,generate_list_of_dict2,make_a_graphic3,make_a_graphic2} from "../utility_function/utility_function.tsx"
 
+import { useTranslation } from 'react-i18next'
+
 import {
   Table,
   TableBody,
@@ -27,6 +29,16 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 const DetailedStat = () => {
   const retrieved_data = JSON.parse(localStorage.getItem("detailed_data_stat"));
   const [text_input, settext_input] = useState("");
+  const { t, i18n } = useTranslation()
+  
+  useEffect(() => {
+        if (retrieved_data[4].language == "fr") {
+            i18n.changeLanguage("fr");
+        } else {
+            i18n.changeLanguage("en");
+            console.log("the page should be in english");
+        }
+    }, []);
     
   function generate_list_of_dict(list_:any,list2_:any,list3_:any) {
       let list_of_dict:any = [];
@@ -71,7 +83,7 @@ const DetailedStat = () => {
       <div>
 
         {Custom_navbar(2,"")}
-        <h1 className="nice_font">Statistiques detaillées</h1>
+        <h1 className="nice_font">{t("Statistiques detaillées")}</h1>
         {add_space(5)}
         
          <button onClick={go_back_to_the_main_page} className="medium_button">
@@ -79,7 +91,7 @@ const DetailedStat = () => {
         </button>
         {add_space(5)}
 
-        <input name="myInput" placeholder="Cherche ton élement" onChange={handle_text_input}/>
+        <input name="myInput" placeholder={t("Cherche ton élement")} onChange={handle_text_input}/>
         {add_space(5)}
         <br></br>
 
@@ -90,9 +102,9 @@ const DetailedStat = () => {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Element</TableCell>
-                      <TableCell>Nombre de fois qu'il est présent</TableCell>
-                      <TableCell>Son %</TableCell>
+                      <TableCell>{t("Element")}</TableCell>
+                      <TableCell>{t("Nombre de fois qu'il est présent")}</TableCell>
+                      <TableCell>{t("Son %")}</TableCell>
                     </TableRow>
                   </TableHead>
 
@@ -114,8 +126,8 @@ const DetailedStat = () => {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Element</TableCell>
-                      <TableCell>Nombre de jours où tu as postulé</TableCell>
+                      <TableCell>{t("Element")}</TableCell>
+                      <TableCell>{t("Nombre de jours où tu as postulé")}</TableCell>
                     </TableRow>
                   </TableHead>
 
@@ -137,8 +149,8 @@ const DetailedStat = () => {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Element</TableCell>
-                      <TableCell>Nombre de candidatures</TableCell>
+                      <TableCell>{t("Element")}</TableCell>
+                      <TableCell>{t("Nombre de candidatures")}</TableCell>
                     </TableRow>
                   </TableHead>
 
@@ -162,8 +174,8 @@ const DetailedStat = () => {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Element</TableCell>
-                      <TableCell>Nombre de jours consécutif</TableCell>
+                      <TableCell>{t("Element")}</TableCell>
+                      <TableCell>{t("Nombre de jours consécutif")}</TableCell>
                     </TableRow>
                   </TableHead>
 

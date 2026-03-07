@@ -8,6 +8,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import Custom_navbar from "./navbar.tsx"
 import {make_navbar_element,make_a_graphic,add_space,generate_list_of_dict2,make_a_graphic3,make_a_graphic2} from "../utility_function/utility_function.tsx"
 import { AgCharts } from 'ag-charts-react';
+import { useTranslation } from 'react-i18next'
+
 import {
   Table,
   TableBody,
@@ -22,14 +24,23 @@ import {
 const ApplicationHistory = () => {
     
     const retrieved_data = JSON.parse(localStorage.getItem("detailed_data"));
+    const { t, i18n } = useTranslation()
+
     useEffect(() => {
+
         localStorage.setItem(
         "detailed_data",
             JSON.stringify(retrieved_data)
         );
-        
+
+        if (retrieved_data.language == "fr") {
+            i18n.changeLanguage("fr");
+        } else {
+            i18n.changeLanguage("en");
+            console.log("the page should be in english");
+        }
     }, []);
-    
+
     
     let navbar_data_display = make_navbar_element(retrieved_data)
     const [text_input, settext_input] = useState("");
@@ -87,9 +98,9 @@ const ApplicationHistory = () => {
                 <Table>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Date</TableCell>
-                      <TableCell>Nom de l'entreprise</TableCell>
-                      <TableCell>Nom du poste</TableCell>
+                      <TableCell>{t("Date")}</TableCell>
+                      <TableCell>{t("Nom de l'entreprise")}</TableCell>
+                      <TableCell>{t("Nom du poste")}</TableCell>
                     </TableRow>
                   </TableHead>
 
@@ -120,9 +131,9 @@ const ApplicationHistory = () => {
         <div className="backgroundcolour">
             {Custom_navbar(1,navbar_data_display)}
             {add_space(5)}
-            <input name="myInput" placeholder="Cherche ton élement" onChange={handle_text_input}/>
+            <input name="myInput" placeholder={t("Cherche ton élement")} onChange={handle_text_input}/>
             {add_space(5)}
-            <h1 className="center_text">Historique des candidatures 📅</h1>
+            <h1 className="center_text">{t("Historique des candidatures 📅")}</h1>
             {add_space(7)}
             <button className="medium_button" onClick={handle_revere_input}>🔄</button>
             {add_space(2)}

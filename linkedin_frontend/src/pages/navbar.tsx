@@ -9,8 +9,23 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './navbar.css'
+import { useTranslation } from 'react-i18next'
 
-const Custom_navbar = (type:number = 0 , variable:any = "") => {
+function change_language(event:any, language:string) {
+    const { t, i18n } = useTranslation()    
+    if (language == "en") {
+        console.log("language to english")
+        i18n.changeLanguage("en");
+    }   
+
+    if (language == "fr") {
+        console.log("language to french")
+        i18n.changeLanguage("fr");
+    }   
+    
+    
+}
+export default function Custom_navbar(type:number = 0 , variable:any = "") {
     
     if (type === 0 ) {
         return (
@@ -27,8 +42,8 @@ const Custom_navbar = (type:number = 0 , variable:any = "") => {
                     Langue
                 </a>
                 <ul className="dropdown-menu">
-                    <li><a className="flag_button dropdown-item" href="#">🇬🇧</a></li>
-                    <li><a className="flag_button dropdown-item" href="#">🇫🇷</a></li>
+                    <li><a className="flag_button dropdown-item" onClick={(event) => change_language(event,"toto")} href="#">🇬🇧</a></li>
+                    <li><a className="flag_button dropdown-item" onClick={(event) => change_language(event,"toto")} href="#">🇫🇷</a></li>
                 </ul>
                 </li>
             </ul>
@@ -93,4 +108,3 @@ const Custom_navbar = (type:number = 0 , variable:any = "") => {
     }   
 }
 
-export default Custom_navbar;

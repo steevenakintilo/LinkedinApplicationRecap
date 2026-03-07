@@ -4,16 +4,40 @@ import { ToastContainer, toast } from 'react-toastify';
 import Custom_navbar from "./navbar.tsx"
 import {make_navbar_element,make_a_graphic,generate_list_of_dict,add_space,generate_list_of_dict2,make_a_graphic3,make_a_graphic2,go_to_detailed_stat_page} from "../utility_function/utility_function.tsx"
 import { AgCharts } from 'ag-charts-react';
+import { useTranslation } from 'react-i18next'
+import {useEffect } from 'react';
 
 const DayStatistics = () => {
     const retrieved_data = JSON.parse(localStorage.getItem("detailed_data"));
-    console.log("ddddayyyyy " , retrieved_data)
+    const { t, i18n } = useTranslation()
+    console.log("ddddayyyyy " , retrieved_data.language)
+    console.log("cuurent language  " , i18n.language)
+    // console.log("yooooo  " , i18n.language)
+    // console.log("yooooo  " , i18n.language)
+    
+    
+    useEffect(() => {
+        if (retrieved_data.language == "fr") {
+            i18n.changeLanguage("fr");
+        } else {
+            i18n.changeLanguage("en");
+            console.log("the page should be in english");
+        }
+    }, []);
+    
     // 📅 Historique des candidatures
-
+    
     let navbar_data_display = make_navbar_element(retrieved_data)
     let max_number_for_display : number = 450
     const dict_number_of_application_per_day_name_value = generate_list_of_dict(retrieved_data.number_of_application_per_day_name_value,retrieved_data.number_of_application_per_day_name_ratio,10)
-    const dict_number_of_application_per_day_name_value_sorted = generate_list_of_dict(retrieved_data.number_of_application_per_day_name_value_sorted,retrieved_data.number_of_application_per_day_name_occurence_sorted,10)
+    
+    let dict_number_of_application_per_day_name_value_sorted = {}
+    if (i18n.language === "en") {
+        dict_number_of_application_per_day_name_value_sorted = generate_list_of_dict(retrieved_data.number_of_application_per_day_name_value_sorted_english,retrieved_data.number_of_application_per_day_name_occurence_sorted,10)
+    } else {
+        dict_number_of_application_per_day_name_value_sorted = generate_list_of_dict(retrieved_data.number_of_application_per_day_name_value_sorted,retrieved_data.number_of_application_per_day_name_occurence_sorted,10)
+    
+    } 
     
     const dict_number_of_application_over_time_date_split_in_20 = generate_list_of_dict2(retrieved_data.number_of_application_over_time_date_split_in_20,retrieved_data.number_of_application_over_time_split_in_20,200)
     const dict_number_of_application_over_time_date_split_in_10 = generate_list_of_dict2(retrieved_data.number_of_application_over_time_date_split_in_10,retrieved_data.number_of_application_over_time_split_in_10,10)
@@ -38,38 +62,38 @@ const DayStatistics = () => {
     // }
     
 
-    const chart_number_of_application_per_day_name_value = make_a_graphic("pie" , dict_number_of_application_per_day_name_value,"Pourcentage de candidatures par jour de la semaine")
-    const chart_number_of_application_per_day_name_value_sorted = make_a_graphic("bar" , dict_number_of_application_per_day_name_value_sorted,"Nombre de candidatures par jour de la semaine")
+    const chart_number_of_application_per_day_name_value = make_a_graphic("pie" , dict_number_of_application_per_day_name_value,t("Pourcentage de candidatures par jour de la semaine"))
+    const chart_number_of_application_per_day_name_value_sorted = make_a_graphic("bar" , dict_number_of_application_per_day_name_value_sorted,t("Nombre de candidatures par jour de la semaine"))
     
-    const chart_number_of_application_split_in_20 = make_a_graphic3("line" , dict_number_of_application_over_time_date_split_in_20,"Evolution des candidatures sur 20 dates distinctes")
-    const chart_number_of_application_split_in_10 = make_a_graphic3("line" , dict_number_of_application_over_time_date_split_in_10,"Evolution des candidatures sur 10 dates distinctes")
-    const chart_number_of_application_split_in_5 = make_a_graphic3("line" , dict_number_of_application_over_time_date_split_in_5,"Evolution des candidatures sur 5 dates distinctes")
-    const chart_number_of_application_split_in_3 = make_a_graphic3("line" , dict_number_of_application_over_time_date_split_in_3,"Evolution des candidatures sur 3 dates distinctes")
-    const chart_number_of_application_per_hour_value_sorted = make_a_graphic("line" , dict_number_of_application_per_hour_value_sorted,"Nombre de candidatures par heure")
-    const chart_number_of_application_per_hour_ratio = make_a_graphic("bar" , dict_number_of_application_per_hour_ratio,"Pourcentage de candidatures par heure")
-    const chart_all_day_application_occurence_rate_value_sorted = make_a_graphic("line" , dict_all_day_application_occurence_rate_value_sorted,"Nombre de fois que tu as postulé par jour")
-    const chart_dict_all_day_application_occurence_rate_value = make_a_graphic("bar" , dict_all_day_application_occurence_rate_value,"Jours où tu as le plus postulé")
+    const chart_number_of_application_split_in_20 = make_a_graphic3("line" , dict_number_of_application_over_time_date_split_in_20,t("Evolution des candidatures sur 20 dates distinctes"))
+    const chart_number_of_application_split_in_10 = make_a_graphic3("line" , dict_number_of_application_over_time_date_split_in_10,t("Evolution des candidatures sur 10 dates distinctes"))
+    const chart_number_of_application_split_in_5 = make_a_graphic3("line" , dict_number_of_application_over_time_date_split_in_5,t("Evolution des candidatures sur 5 dates distinctes"))
+    const chart_number_of_application_split_in_3 = make_a_graphic3("line" , dict_number_of_application_over_time_date_split_in_3,t("Evolution des candidatures sur 3 dates distinctes"))
+    const chart_number_of_application_per_hour_value_sorted = make_a_graphic("line" , dict_number_of_application_per_hour_value_sorted,t("Nombre de candidatures par heure"))
+    const chart_number_of_application_per_hour_ratio = make_a_graphic("bar" , dict_number_of_application_per_hour_ratio,t("Pourcentage de candidatures par heure"))
+    const chart_all_day_application_occurence_rate_value_sorted = make_a_graphic("line" , dict_all_day_application_occurence_rate_value_sorted,t("Nombre de fois que tu as postulé par jour"))
+    const chart_dict_all_day_application_occurence_rate_value = make_a_graphic("bar" , dict_all_day_application_occurence_rate_value,t("Jours où tu as le plus postulé"))
     
-    const chart_application_day_streak_value = make_a_graphic("bar" , dict_application_day_streak_value,"Nombre de jours consécutif où tu as postulé")
-    const chart_non_application_day_streak_value = make_a_graphic("bar" , dict_non_application_day_streak_value,"Nombre de jours consécutif où tu n'as pas postulé")
-    const chart_application_day_streak_excluding_weekend_value = make_a_graphic("bar" , dict_application_day_streak_excluding_weekend_value,"Nombre de jours consécutif où tu as postulé (sans compter les week-ends)")
-    const chart_non_application_day_streak_excluding_weekend_value = make_a_graphic("bar" , dict_non_application_day_streak_excluding_weekend_value,"Nombre de jours consécutif où tu n'as pas postuleé (sans compter les week-ends)")
-    const chart_number_of_day_you_applied = make_a_graphic2("pie" , retrieved_data.number_of_day_you_applied_you_didnt_apply_rate,"Jour où tu n'as pas postulé",retrieved_data.number_of_day_you_applied_rate,"Jour où tu as postulé","Pourcentage de jours où tu as postulé")
-    const chart_number_of_day_you_applied_excluding_weekend = make_a_graphic2("pie" , retrieved_data.number_of_day_you_applied_you_didnt_apply_rate,"Jour où tu n'as pas postulé",retrieved_data.number_of_day_you_applied_rate,"Jour où tu as postulé","Pourcentage de jours où tu as postulé sans compter les week-ends")
+    const chart_application_day_streak_value = make_a_graphic("bar" , dict_application_day_streak_value,t("Nombre de jours consécutif où tu as postulé"))
+    const chart_non_application_day_streak_value = make_a_graphic("bar" , dict_non_application_day_streak_value,t("Nombre de jours consécutif où tu n'as pas postulé"))
+    const chart_application_day_streak_excluding_weekend_value = make_a_graphic("bar" , dict_application_day_streak_excluding_weekend_value,t("Nombre de jours consécutif où tu as postulé (sans compter les week-ends)"))
+    const chart_non_application_day_streak_excluding_weekend_value = make_a_graphic("bar" , dict_non_application_day_streak_excluding_weekend_value,t("Nombre de jours consécutif où tu n'as pas postuleé (sans compter les week-ends)"))
+    const chart_number_of_day_you_applied = make_a_graphic2("pie" , retrieved_data.number_of_day_you_applied_you_didnt_apply_rate,t("Jour où tu n'as pas postulé"),retrieved_data.number_of_day_you_applied_rate,t("Jour où tu as postulé"),t("Pourcentage de jours où tu as postulé"))
+    const chart_number_of_day_you_applied_excluding_weekend = make_a_graphic2("pie" , retrieved_data.number_of_day_you_applied_you_didnt_apply_rate,t("Jour où tu n'as pas postulé"),retrieved_data.number_of_day_you_applied_rate,t("Jour où tu as postulé"),t("Pourcentage de jours où tu as postulé sans compter les week-ends"))
     
-    const chart_number_of_day_you_applied_not_applied = make_a_graphic2("bar" , retrieved_data.number_of_day_you_applied,"Jour où tu aspostulé",retrieved_data.number_of_day_you_applied_you_didnt_apply,"Jour où tu n'as pas postulé","Nombres de jour où tu as postulé/pas postulé")
-    const chart_number_of_day_you_applied_not_applied_excluding_weekend = make_a_graphic2("bar" , retrieved_data.number_of_day_you_applied_excluding_weekend,"Jour où tu as postulé",retrieved_data.number_of_day_you_didnt_apply_excluding_weekend,"Jour où tu n'as pas postulé","Pourcentage de jours où tu as postulé sans compter les week-ends")
-    const chart_number_of_postualation_on_even_day_ratio = make_a_graphic2("pie" , retrieved_data.number_of_postualation_on_even_day_ratio ,"Pourcentage de jour pair où tu as postulé",retrieved_data.number_of_postualation_on_odd_day_ratio ,"Pourcentage de jour impair où tu as postulé","Pourcentage de jour pair/impair où tu as postulé")
+    const chart_number_of_day_you_applied_not_applied = make_a_graphic2("bar" , retrieved_data.number_of_day_you_applied,t("Jour où tu as postulé"),retrieved_data.number_of_day_you_applied_you_didnt_apply,t("Jour où tu n'as pas postulé"),t("Nombres de jour où tu as postulé/pas postulé"))
+    const chart_number_of_day_you_applied_not_applied_excluding_weekend = make_a_graphic2("bar" , retrieved_data.number_of_day_you_applied_excluding_weekend,t("Jour où tu as postulé"),retrieved_data.number_of_day_you_didnt_apply_excluding_weekend,t("Jour où tu n'as pas postulé"),t("Pourcentage de jours où tu as postulé sans compter les week-ends"))
+    const chart_number_of_postualation_on_even_day_ratio = make_a_graphic2("pie" , retrieved_data.number_of_postualation_on_even_day_ratio ,t("Pourcentage de jour pair où tu as postulé"),retrieved_data.number_of_postualation_on_odd_day_ratio ,t("Pourcentage de jour impair où tu as postulé"),t("Pourcentage de jour pair/impair où tu as postulé"))
     
-    console.log("daaaayyyyyy " , retrieved_data.number_of_application_per_day_name_value_sorted)
-    console.log(retrieved_data.number_of_application_per_day_name_value.length)
-    console.log(chart_number_of_application_per_day_name_value_sorted)
+    //console.log("daaaayyyyyy " , retrieved_data.number_of_application_per_day_name_value_sorted)
+    //console.log(retrieved_data.number_of_application_per_day_name_value.length)
+    console.log(t("Nombre de candidatures par heure"),"\n",t("Nombre de jours consécutif où tu as postulé"))
 
     return (
         <div className="backgroundcolour">
             {Custom_navbar(1,navbar_data_display)}
             {add_space(5)}
-            <h1 className="center_text">Statistiques liées  aux heures/jours 📊 :</h1>
+            <h1 className="nice_font">{t('Statistiques liées aux heures/jours 📊 :')}</h1>
             {add_space(7)}
             
             <div>
@@ -181,7 +205,7 @@ const DayStatistics = () => {
                             )
                             }
                         >
-                            Toutes les statistiques 📊
+                            {t("Toutes les statistiques 📊")}
                         </button>
                     </div>
                     </div>
@@ -214,7 +238,7 @@ const DayStatistics = () => {
                             )
                             }
                         >
-                            Toutes les statistiques 📊
+                            {t("Toutes les statistiques 📊")}
                         </button>
                     </div>
                     </div>
@@ -247,7 +271,7 @@ const DayStatistics = () => {
                             )
                             }
                         >
-                            Toutes les statistiques 📊
+                            {t("Toutes les statistiques 📊")}
                         </button>
                     </div>
                     </div>
@@ -281,7 +305,7 @@ const DayStatistics = () => {
                             )
                             }
                         >
-                            Toutes les statistiques 📊
+                            {t("Toutes les statistiques 📊")}
                         </button>
                     </div>
                     </div>
@@ -315,7 +339,7 @@ const DayStatistics = () => {
                             )
                             }
                         >
-                            Toutes les statistiques 📊
+                            {t("Toutes les statistiques 📊")}
                         </button>
                     </div>
                     </div>
@@ -358,8 +382,13 @@ const DayStatistics = () => {
             </div>
             
             {add_space(5)}
-            <h1 className="nice_font">Tu as postulé lors de {retrieved_data.number_of_postualation_on_odd_day} jours pair et {retrieved_data.number_of_postualation_on_even_day} jours impaire</h1>
-                    
+            <h1 className="nice_font">
+            {t('key8', { 
+                a: retrieved_data.number_of_postualation_on_odd_day, 
+                b: retrieved_data.number_of_postualation_on_even_day 
+            })}
+            </h1>
+
             <br></br>
             
             
